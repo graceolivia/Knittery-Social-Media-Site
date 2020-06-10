@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Yarn.
+{% endblock %}
+{% block main %}
+<h1>Patterns.</h1>
+<h2>Update new patterns.</h2><a aria-controls="multiCollapseExample1" aria-expanded="false" class="btn btn-dark" data-toggle="collapse" href="#newProject" role="button">Add pattern.</a>
+<div class="collapse multi-collapse" id="newProject">
+	<form action="/patterns" method="post">
+		<div class="form-group">
+			<input class="form-control" name="name" placeholder="Pattern named (required)" required="" type="text">
+			<input class="form-control" name="author" placeholder="Author" type="text"> <select class="custom-select" id="weight" name="weight">
+				<option disabled selected value="">
+					Yarn Weight
+				</option>
+				<option value="Lace">
+					Lace
+				</option>
+				<option value="Fingering">
+					Fingering
+				</option>
+				<option value="Sport">
+					Sport
+				</option>
+				<option value="DK">
+					DK
+				</option>
+				<option value="Worsted">
+					Worsted
+				</option>
+				<option value="Bulky">
+					Bulky
+				</option>
+				<option value="SuperBulky">
+					Super Bulky
+				</option>
+			</select>
+			<input class="form-control" name="sizes_available" placeholder="Sizes available" required="" type="text">
+			<input class="form-control" name="needle_size" placeholder="Needle size" required="" type="text">
+			<span>Date published:</span> <input id="start" max="2300-12-31" min="1700-01-01" name="published" type="date">
+		</div><button class="btn btn-outline-dark btn-sm" type="submit">Submit Pattern</button>
+	</form>
+</div><br>
+<hr>
+<h2>Browse Patterns.</h2>
+{% for row in rows %}
+<div class="card mb-3" style="width: 18rem;">
+  <div class="card-header">
+    {{ row["name"] }}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Author: {{ row["author"] }}</li>
+    <li class="list-group-item">Weight: {{ row["weight"] }}</li>
+    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>
+    <li class="list-group-item">Sizes: {{ row["sizes_available"] }}</li>
+    <li class="list-group-item">Needle Size: {{ row["needle_size"] }}</li>
+  </ul>
+</div>
+{% endfor %}
+
+
+{% endblock %}

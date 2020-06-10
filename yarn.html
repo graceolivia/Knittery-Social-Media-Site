@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Yarn.
+{% endblock %}
+{% block main %}
+<h1>Yarn</h1>
+<h2>Stash new yarn.</h2>
+  <a class="btn btn-dark" data-toggle="collapse" href="#newProject" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Stash yarn.</a>
+ <div class="collapse multi-collapse" id="newProject">
+<form action="/yarn" method="post">
+        <div class="form-group">
+
+            <input class="form-control" name="name" placeholder="yarn name (required)" type="text" required>
+            <input class="form-control" name="fiber" placeholder="Fiber content" type="text">
+            <input class="form-control" name="yardage" placeholder="Yardage" type="number">
+            <select id="weight" name="weight" class="custom-select">
+    <option disabled selected value=""> Yarn Weight</option>
+    <option value="Lace">Lace</option>
+    <option value="Fingering">Fingering</option>
+    <option value="Sport">Sport</option>
+        <option value="DK">DK</option>
+    <option value="Worsted">Worsted</option>
+    <option value="Bulky">Bulky</option>
+    <option value="SuperBulky">Super Bulky</option>
+  </select>
+        </div>
+        <button class="btn btn-outline-dark btn-sm" type="submit">Stash Yarn</button>
+    </form>
+    </div>
+    <br>
+    <hr></hr>
+<h2>Your Stash.</h2>
+<p>Here's what you've got in the stash:</p>
+{% for row in rows %}
+<div class="card mb-3" style="width: 18rem;">
+  <div class="card-header">
+    {{ row["name"] }}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Fiber: {{ row["fiber"] }}</li>
+    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>
+    <li class="list-group-item">Weight: {{ row["weight"] }}</li>
+  </ul>
+</div>
+{% endfor %}
+
+
+{% endblock %}

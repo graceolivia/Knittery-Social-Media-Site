@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Projects.
+{% endblock %}
+{% block main %}
+<h1>Projects</h1>
+<h2>Submit new project.</h2>
+  <a class="btn btn-dark" data-toggle="collapse" href="#newProject" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">New Project</a>
+ <div class="collapse multi-collapse" id="newProject">
+<form action="/projects" method="post">
+        <div class="form-group">
+            <input class="form-control" name="pattern" placeholder="Pattern name (required)" type="text" required>
+            <input class="form-control" name="yarn" placeholder="Yarn" type="text">
+            <input class="form-control" name="yardage" placeholder="Yardage" type="number">
+            <textarea class="form-control" name="notes" placeholder="notes" rows="4" cols="50"></textarea>
+        </div>
+        <button class="btn btn-outline-dark btn-sm" type="submit">Submit Project</button>
+    </form>
+    </div>
+    <br>
+    <hr></hr>
+<h2>Your projects.</h2>
+<p>Here's what you have been working on:</p>
+{% for row in rows %}
+<div class="card mb-3" style="width: 18rem;">
+  <div class="card-header">
+    {{ row["pattern"] }}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Fiber: {{ row["yarn"] }}</li>
+    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>
+    <li class="list-group-item">Weight: {{ row["notes"] }}</li>
+  </ul>
+</div>
+{% endfor %}
+{% endblock %}
