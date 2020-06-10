@@ -1,8 +1,9 @@
 from cs50 import SQL
-from flask import Flask, render_template, request, redirect, session, url_for
-
+from flask import Flask, render_template, request, redirect, session, url_for, flash
+from key import key
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = key()
 
 db = SQL("sqlite:///yarn.db")
 
@@ -57,14 +58,52 @@ def patterns():
         db.execute("INSERT INTO patterns (name, author, weight, sizes_available, needle_size, published) VALUES (:name, :author, :weight, :sizes_available, :needle_size, :published)", name=name, author=author, weight=weight, sizes_available=sizes_available, needle_size=needle_size, published=published)
         rows = db.execute("SELECT name, author, weight, sizes_available, needle_size, published FROM patterns")
         return render_template("patterns.html", rows=rows)
-        
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    if request.method == "POST":
+        name = request.form.get("name")
+        password = request.form.get("password")
+        rows = db.execute("SELECT * FROM users WHERE name = :name",
+                name=request.form.get("name"))
+        if len(rows) != 1:
+            flash("Username Not Found")
+            print("Username not found!")
+            return redirect("/login")
+        else:
+            passw0rd = db.execute("SELECT password FROM users WHERE name = :name",
+            name=request.form.get("name"))
+            passcode = passw0rd[0]['password']
+        if passcode != password:
+            print("Incorrect password")
+            return redirect("/login")
+        else:
+            session["user"] = rows[0]["name"]
+            print(session)
+            print("session username set")
+            return redirect("/")
+
+    return render_template("public/sign_in.html")
+
 @app.route("/profile")
 def profile():
-
-    if not session.get("USERNAME") is None:
-        username = session.get("USERNAME")
-        user = users[username]
-        return render_template("public/profile.html", user=user)
+    if not session.get("user") is None:
+        currentuser = session["user"]
+        profile = db.execute("SELECT * FROM users WHERE name = :name",
+        name=currentuser)
+        print(profile)
+        return render_template("profile.html", profile=profile)
     else:
-        print("No username found in session")
-        return redirect(url_for("sign_in"))
+        print("No user logged in.")
+        flash("No user logged in. Please log in.")
+        return redirect("/login")
+
+@app.route("/logout", methods=["GET", "POST"])
+def logout():
+    if request.method == "GET":
+        return render_template("logout.html")
+    if request.method == "POST":
+        session.pop("user", None)
+        return redirect("/")

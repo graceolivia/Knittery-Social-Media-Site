@@ -31,11 +31,30 @@
       </li>
     </ul>
     <ul class="navbar-nav ml-auto mt-2">
+
+
+        {% if session.user %}
+        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+        {% else %}
         <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
         <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+        {% endif %}
+
     </ul>
   </div>
 </nav>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+                <div class="alert alert-primary border text-center" role="alert">
+                    {{ message}}
+                </div>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 	<main class="container p-5">
 		{% block main %}{% endblock %}
 	</main>

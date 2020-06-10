@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Your Profile
+{% endblock %}
+{% block main %}
+<h1>{{ profile[0]["name"] }}</h1>
+<ul>
+<li>Years knitting: {{ profile[0]["years_knitting"] }}</li>
+<li>Favorite Color: {{ profile[0]["favorite_color"] }}</li>
+<li>About Me: {{ profile[0]["about_me"]}}</li>
+</ul>
+
+
+{% endblock %}
