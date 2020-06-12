@@ -1,5 +1,12 @@
 .navbar {
-    box-shadow: 0 4px 2px -2px gray;
+    opacity: 0.8;
+    transition: opacity 1s;
+
+}
+
+.navbar:hover {
+    opacity: 1;
+
 }
 
 body {
@@ -7,3 +14,25 @@ body {
 }
 
 .card {display:inline-block;}
+
+.nav-item:hover{
+    background-color: #67737e;
+    color: #0b0d0e;
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: underline #73C2BE;
+  letter-spacing: .1em;
+  animation:
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+

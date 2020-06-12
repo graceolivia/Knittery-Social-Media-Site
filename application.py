@@ -5,11 +5,13 @@ from key import key
 app = Flask(__name__)
 app.config["SECRET_KEY"] = key()
 
+
 db = SQL("sqlite:///yarn.db")
 
 @app.route("/")
 def index():
-   return render_template("index.html")
+       return render_template("index.html")
+
 
 @app.route("/projects", methods=["GET", "POST"])
 def projects():
@@ -87,6 +89,27 @@ def login():
 
     return render_template("public/sign_in.html")
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "GET":
+        return render_template("register.html")
+    if request.method == "POST":
+        name = request.form.get("name")
+        password = request.form.get("password")
+        rows = db.execute("SELECT * FROM users WHERE name = :name",
+                name=request.form.get("name"))
+        if len(rows) == 1:
+            flash("Username In Use Already")
+            return redirect("/register")
+            #else add it to the table
+        else:
+            session["user"] = rows[0]["name"]
+            print(session)
+            print("session username set")
+            return redirect("/")
+
+    return render_template("public/sign_in.html")
+
 @app.route("/profile")
 def profile():
     if not session.get("user") is None:
@@ -103,7 +126,9 @@ def profile():
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     if request.method == "GET":
-        return render_template("logout.html")
+        session.pop("user", None)
+        return redirect("/")
     if request.method == "POST":
         session.pop("user", None)
         return redirect("/")
+

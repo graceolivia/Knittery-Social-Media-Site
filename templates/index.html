@@ -4,6 +4,10 @@
 Welcome.
 {% endblock %}
 {% block main %}
-<h1>Welcome to Knittery.</h1>
-<p>Log projects, meet people, have fun!</p>
+{% if session.user %}
+<h1 class="typewriter">Hello, {{ session['user'] }}.</h1>
+{% else %}
+<h1 class="typewriter">Welcome to Knittery.</h1>
+<p class="appear">Log projects, meet people, have fun!</p>
+{% endif %}
 {% endblock %}
