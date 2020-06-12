@@ -16,7 +16,7 @@ The Ravelry clone should allow users to register, login, logout, log projects an
 <h5>To-Do<h5>:
 
 - [x] Create Pages and Databases for Projects, Yarn, and Patterns
-- [ ] Enable Login, Register, and Logout
+- [x] Enable Login, Register, and Logout
 - [ ] hash passwords
 - [ ] Create Profile Pages that show User info and their Projects
 - [ ] Make Tag Databases to hold Friendships, link Projects and Patterns, and link Yarn and Projects

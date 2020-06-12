@@ -1,3 +1,4 @@
+#FLASK_DEBUG=1
 from cs50 import SQL
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from key import key
@@ -79,12 +80,12 @@ def login():
             name=request.form.get("name"))
             passcode = passw0rd[0]['password']
         if passcode != password:
-            print("Incorrect password")
+            flash("Incorrect password")
             return redirect("/login")
         else:
             session["user"] = rows[0]["name"]
             print(session)
-            print("session username set")
+            flash("Logged in!")
             return redirect("/")
 
     return render_template("public/sign_in.html")
@@ -96,32 +97,58 @@ def register():
     if request.method == "POST":
         name = request.form.get("name")
         password = request.form.get("password")
+        passwordconfirm = request.form.get("passwordconfirm")
         rows = db.execute("SELECT * FROM users WHERE name = :name",
                 name=request.form.get("name"))
         if len(rows) == 1:
             flash("Username In Use Already")
             return redirect("/register")
-            #else add it to the table
+        if password != passwordconfirm:
+            flash("Make sure passwords match")
+            return redirect("/register")
         else:
-            session["user"] = rows[0]["name"]
+            db.execute("INSERT INTO users(name, password) VALUES (:name, :password)", name=name, password=password)
+            row = db.execute("SELECT name FROM users WHERE name = :name", name=name)
+            session["user"] = row[0]["name"]
             print(session)
-            print("session username set")
+            print("Registered!")
             return redirect("/")
 
     return render_template("public/sign_in.html")
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
-    if not session.get("user") is None:
-        currentuser = session["user"]
+    if request.method == "GET":
+        if not session.get("user") is None:
+            currentuser = session["user"]
+            profile = db.execute("SELECT * FROM users WHERE name = :name",
+            name=currentuser)
+            return render_template("profile.html", profile=profile)
+        else:
+            print("No user logged in.")
+            flash("No user logged in. Please log in.")
+            return redirect("/login")
+    if request.method == "POST":
+        return redirect("/profile/edit")
+
+@app.route("/profile/edit", methods=["GET", "POST"])
+def profileedit():
+    currentuser = session["user"]
+    if request.method == "GET":
         profile = db.execute("SELECT * FROM users WHERE name = :name",
         name=currentuser)
-        print(profile)
-        return render_template("profile.html", profile=profile)
-    else:
-        print("No user logged in.")
-        flash("No user logged in. Please log in.")
-        return redirect("/login")
+        return render_template("profileedit.html", profile=profile)
+    if request.method == "POST":
+        years_knitting = request.form.get("years_knitting")
+        favorite_color = request.form.get("favorite_color")
+        about_me = request.form.get("about_me")
+        print(years_knitting)
+        print(favorite_color)
+        print(about_me)
+        db.execute("UPDATE users SET years_knitting = :years_knitting, favorite_color = :favorite_color, about_me = :about_me WHERE name = :name;",
+        years_knitting=years_knitting, favorite_color=favorite_color, about_me=about_me, name=currentuser)
+        return redirect("/profile")
+
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
