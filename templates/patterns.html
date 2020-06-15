@@ -10,7 +10,8 @@ Yarn.
 	<form action="/patterns" method="post">
 		<div class="form-group">
 			<input class="form-control" name="name" placeholder="Pattern named (required)" required="" type="text">
-			<input class="form-control" name="author" placeholder="Author" type="text"> <select class="custom-select" id="weight" name="weight">
+			<input class="form-control" name="author" placeholder="Author" type="text">
+			<select class="custom-select" id="weight" name="weight">
 				<option disabled selected value="">
 					Yarn Weight
 				</option>
@@ -43,7 +44,7 @@ Yarn.
 	</form>
 </div><br>
 <hr>
-<h2>Browse Patterns.</h2>
+<h2>Browse All Pattern on Knittery:</h2>
 {% for row in rows %}
 <div class="card mb-3" style="width: 18rem;">
   <div class="card-header">

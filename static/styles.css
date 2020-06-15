@@ -36,3 +36,44 @@ body {
   to { width: 100% }
 }
 
+.icon {
+
+}
+
+.yarnbig {
+    	color: transparent;
+    	background: rgb(206,183,237);
+background: linear-gradient(90deg, rgba(206,183,237,1) 2%, rgba(238,174,202,1) 44%, rgba(220,221,182,1) 62%, rgba(206,183,237,1) 100%);
+       background-clip: text;
+        -webkit-background-clip: text;
+      font-size: 100px;
+       }
+
+.staricon {
+    color: transparent;
+           background: yellow;
+       background-clip: text;
+        -webkit-background-clip: text;
+    font-size: 60px;
+
+}
+
+.sitelogo {
+      border-radius: 50%;
+  -webkit-transition: -webkit-transform .8s ease-in-out;
+          transition:         transform .8s ease-in-out;
+}
+
+.sitelogo:hover {
+      -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+}
+
+.searchicon {
+        color: transparent;
+           background: #EDFDFB;
+       background-clip: text;
+        -webkit-background-clip: text;
+    font-size: 15px;
+
+}

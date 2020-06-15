@@ -10,7 +10,7 @@ Projects.
  <div class="collapse multi-collapse" id="newProject">
 <form action="/projects" method="post">
         <div class="form-group">
-            <input class="form-control" name="pattern" placeholder="Pattern name (required)" type="text" required>
+            <input class="form-control" name="name" placeholder="Pattern name (required)" type="text" required>
             <input class="form-control" name="yarn" placeholder="Yarn" type="text">
             <input class="form-control" name="yardage" placeholder="Yardage" type="number">
             <textarea class="form-control" name="notes" placeholder="notes" rows="4" cols="50"></textarea>
@@ -25,7 +25,7 @@ Projects.
 {% for row in rows %}
 <div class="card mb-3" style="width: 18rem;">
   <div class="card-header">
-    {{ row["pattern"] }}
+    {{ row["name"] }}
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">Fiber: {{ row["yarn"] }}</li>

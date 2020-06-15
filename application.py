@@ -16,23 +16,24 @@ def index():
 
 @app.route("/projects", methods=["GET", "POST"])
 def projects():
-    user_id = 1
+    userFinder = db.execute("SELECT id FROM users WHERE name = :name", name = session["user"])
+    user_id = userFinder[0]["id"]
     if request.method == "GET":
-        rows = db.execute("SELECT pattern, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
+        rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
         return render_template("projects.html", rows=rows)
     if request.method == "POST":
-        pattern = request.form.get("pattern")
+        name = request.form.get("name")
         yarn = request.form.get("yarn")
         yardage = request.form.get("yardage")
         notes = request.form.get("notes")
-        user_id = 1
-        db.execute("INSERT INTO projects(pattern, yarn, yardage, notes, user_id) VALUES (:pattern, :yarn, :yardage, :notes, :user_id)", pattern=pattern, yarn=yarn, yardage=yardage, notes=notes, user_id=user_id)
-        rows = db.execute("SELECT pattern, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
+        db.execute("INSERT INTO projects(name, yarn, yardage, notes, user_id) VALUES (:name, :yarn, :yardage, :notes, :user_id)", name=name, yarn=yarn, yardage=yardage, notes=notes, user_id=user_id)
+        rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
         return render_template("projects.html", rows=rows)
 
 @app.route("/yarn", methods=["GET", "POST"])
 def yarn():
-    user_id = 1
+    userFinder = db.execute("SELECT id FROM users WHERE name = :name", name = session["user"])
+    user_id = userFinder[0]["id"]
     if request.method == "GET":
         rows = db.execute("SELECT name, yardage, fiber, weight FROM yarn WHERE user_id = :id GROUP BY name", id = user_id)
         return render_template("yarn.html", rows=rows)
@@ -47,7 +48,8 @@ def yarn():
 
 @app.route("/patterns", methods=["GET", "POST"])
 def patterns():
-    user_id = 1
+    userFinder = db.execute("SELECT id FROM users WHERE name = :name", name = session["user"])
+    user_id = userFinder[0]["id"]
     if request.method == "GET":
         rows = db.execute("SELECT name, author, weight, sizes_available, needle_size, published FROM patterns")
         return render_template("patterns.html", rows=rows)
@@ -159,3 +161,16 @@ def logout():
         session.pop("user", None)
         return redirect("/")
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "POST":
+        tosearch = request.form.get("tosearch")
+        search = request.form.get("search")
+        print(tosearch)
+        print(search)
+        results = db.execute("SELECT * FROM :tosearch WHERE name = :search",
+        tosearch=tosearch, search=search)
+        print(results)
+        return render_template("search.html", results=results)
+    if request.method == "GET":
+        return render_template("search.html")

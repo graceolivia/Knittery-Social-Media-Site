@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Search
+{% endblock %}
+{% block main %}
+
+ <h1>Search</h1>
+
+      <form action="/search" method="POST">
+   <input class="form-control" type="search" name="search">
+   			<select class="custom-select" id="tosearch" name="tosearch">
+   				<option disabled selected value="">
+					Search:
+				</option>
+								<option value="patterns">
+					Patterns
+				</option>
+												<option value="projects">
+				Projects
+				</option>
+																<option value="users">
+					Users
+				</option>
+
+												<option value="yarn">
+					Yarn
+				</option>
+
+				</select>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+
+      </form>
+{% if results %}
+{% for result in results %}
+<div class="card mb-3" style="width: 18rem;">
+  <div class="card-header">
+    {{ results["result"] }}
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">{{  }}</li>
+    <li class="list-group-item"> {{ }}</li>
+    <li class="list-group-item"> {{ }}</li>
+  </ul>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
