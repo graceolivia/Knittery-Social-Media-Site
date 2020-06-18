@@ -125,7 +125,21 @@ def profile():
             currentuser = session["user"]
             profile = db.execute("SELECT * FROM users WHERE name = :name",
             name=currentuser)
-            return render_template("profile.html", profile=profile)
+            currentuser_id=profile[0]["id"]
+            friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
+            currentuser_id=currentuser_id)
+            print(friends_id)
+            friends=[]
+            fn = 0
+            for entry in friends_id:
+                friendo = db.execute("SELECT name FROM users WHERE users.id = :friends_id",
+                friends_id=friends_id[fn]["friendee"])
+                frien = friendo[0]["name"]
+                friends.append(frien)
+                fn += 1
+            #this only works for one friends! gotta figure out how to do more :)
+            print(friends)
+            return render_template("profile.html", profile=profile, friends=friends)
         else:
             print("No user logged in.")
             flash("No user logged in. Please log in.")
@@ -151,7 +165,6 @@ def profileedit():
         years_knitting=years_knitting, favorite_color=favorite_color, about_me=about_me, name=currentuser)
         return redirect("/profile")
 
-
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     if request.method == "GET":
@@ -170,7 +183,28 @@ def search():
         print(search)
         results = db.execute("SELECT * FROM :tosearch WHERE name = :search",
         tosearch=tosearch, search=search)
+        if len(results) == 0:
+            flash("No results found with that query!")
+            return redirect("/search")
         print(results)
-        return render_template("search.html", results=results)
+        if (tosearch == "patterns"):
+            return render_template("patterns.html", rows=results)
+        if (tosearch == "projects"):
+            return render_template("projects.html", rows=results)
+        if (tosearch == "users"):
+            return render_template("profile.html", profile=results)
+        if (tosearch == "yarn"):
+             return render_template("yarn.html", rows=results)
+        return redirect("/search")
     if request.method == "GET":
         return render_template("search.html")
+
+@app.route("/addfriend", methods=["POST"])
+def addfriend():
+    af = request.form.get("addfriend")
+    currentuser = session["user"]
+    currentuser_id = db.execute("SELECT id FROM users WHERE name = :currentuser", currentuser=currentuser)
+    af_id = db.execute("SELECT id FROM users WHERE name = :af", af=af)
+    db.execute("INSERT INTO friends(friender, friendee) VALUES (:currentuser_id, :af_id)", currentuser_id=currentuser_id[0]["id"], af_id=af_id[0]["id"])
+    flash(af + " added to friends!")
+    return redirect("/profile")

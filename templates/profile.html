@@ -10,8 +10,25 @@ Your Profile
 <li>Favorite Color: {{ profile[0]["favorite_color"] }}</li>
 <li>About Me: {{ profile[0]["about_me"]}}</li>
 </ul>
+
+{% if profile[0]["name"] == session['user'] %}
 <form action="/profile" method="POST">
-<button type="submit" class="btn btn-primary">Edit</button>
+<button type="submit" class="btn btn-outline-dark">Edit</button>
 </form>
+{% else %}
+<form action="/addfriend" method="POST">
+<button type="submit" class="btn btn-outline-dark" name="addfriend" value="{{ profile[0]["name"] }}">Add friend</button>
+</form>
+{% endif %}
+
+<h2>{{ profile[0]["name"] }}'s Friends</h2>
+
+<ul>
+    {% for friend in friends %}
+    <li>{{ friend }}</li>
+    {% endfor %}
+</ul>
+
+
 
 {% endblock %}
