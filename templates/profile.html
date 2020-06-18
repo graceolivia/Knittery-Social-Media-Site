@@ -13,11 +13,11 @@ Your Profile
 
 {% if profile[0]["name"] == session['user'] %}
 <form action="/profile" method="POST">
-<button type="submit" class="btn btn-outline-dark">Edit</button>
+<button type="submit" class="btn btn-dark">Edit</button>
 </form>
 {% else %}
 <form action="/addfriend" method="POST">
-<button type="submit" class="btn btn-outline-dark" name="addfriend" value="{{ profile[0]["name"] }}">Add friend</button>
+<button type="submit" class="btn btn-dark" name="addfriend" value="{{ profile[0]["name"] }}">Add friend</button>
 </form>
 {% endif %}
 

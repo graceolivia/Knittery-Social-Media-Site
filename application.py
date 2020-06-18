@@ -194,7 +194,7 @@ def search():
         if (tosearch == "users"):
             return render_template("profile.html", profile=results)
         if (tosearch == "yarn"):
-             return render_template("yarn.html", rows=results)
+            return render_template("yarn.html", rows=results)
         return redirect("/search")
     if request.method == "GET":
         return render_template("search.html")
