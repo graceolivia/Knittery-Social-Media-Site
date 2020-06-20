@@ -23,3 +23,5 @@ The Ravelry clone should allow users to register, login, logout, log projects an
 - [x] Make Tag Databases to hold Friendships
 - [x] Make search function to find users, projects, patterns, yarn
 - [ ] Make it look cool
+- [ ] redo layout without bootstrap - use grid and flexbox
+- [ ] make sidebar
