@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- documentation at http://getbootstrap.com/docs/4.1/, alternative themes at https://bootswatch.com/ -->
+
+        <link href="/static/styles.1.css" rel="stylesheet">
+
+<nav class="header">
+
+	<title>Knittery: {% block title %}{% endblock %}</title>
+</head>
+<body>
+  <div id="container">
+
+  <a href="/"><img src="/static/logo.png" width="50" class="sitelogo"><span style="color:#73C2BE;">Knittery</span></a>
+
+
+    <ul>
+  {% if session.user %}
+      <li>
+        <a href="/projects">Projects</a>
+      </li>
+        <li>
+        <a href="/yarn">Yarn</a>
+      </li>
+      <li>
+        <a href="/patterns">Patterns</a>
+      </li>
+        <li>
+        <a href="/search"><span class="icon searchicon">🔎</span></a>
+      </li>
+{% else %}
+    {% endif %}
+    </ul>
+    <ul>
+        {% if session.user %}
+        <li><a href="/profile">Profile</a></li>
+        <li><a  href="/logout">Log Out</a></li>
+        {% else %}
+        <li><a href="/register">Register</a></li>
+        <li><a href="/login">Log In</a></li>
+        {% endif %}
+    </ul>
+
+</nav>
+<div class="sidebar">
+  <ul><li>item</li></ul>
+</div>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+                <div class="alert" role="alert">
+                    {{ message}}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    Close
+  </button>
+    </div>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+	<main>
+	  <div class="content">
+		{% block main %}{% endblock %}
+		</div>
+	</main>
+	<div class="footer">
+	  <p>footer</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+.container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 50px 1fr 50px;
+    grid-template-areas:
+    "header header header header"
+    "sidebar content content content"
+    "footer  footer  footer footer";
+}
+
+.header{
+    grid-area: header;
+    background-color:blue;
+    display:flex;
+    justify-content: space-between;
+}
+
+.footer{
+    grid-area: footer;
+    background-color: mistyrose;
+    display:flex;
+}
+
+.content{
+    grid-area: content;
+}
+
+.sidebar{
+    grid-area: sidebar;
+}
+
+.alert{
+    background-color:red;
+}
+
+
+.navbar {
+    opacity: 0.8;
+    transition: opacity 1s;
+
+}
+
+.navbar:hover {
+    opacity: 1;
+
+}
+
+body {
+     background-color: #EDFDFB;
+}
+
+.card {display:inline-block;}
+
+.nav-item:hover{
+    background-color: #67737e;
+    color: #0b0d0e;
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: underline #73C2BE;
+  letter-spacing: .1em;
+  animation:
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+.icon {
+
+}
+
+.yarnbig {
+    	color: transparent;
+    	background: rgb(206,183,237);
+background: linear-gradient(90deg, rgba(206,183,237,1) 2%, rgba(238,174,202,1) 44%, rgba(220,221,182,1) 62%, rgba(206,183,237,1) 100%);
+       background-clip: text;
+        -webkit-background-clip: text;
+      font-size: 100px;
+       }
+
+.staricon {
+    color: transparent;
+           background: yellow;
+       background-clip: text;
+        -webkit-background-clip: text;
+    font-size: 60px;
+
+}
+
+.sitelogo {
+      border-radius: 50%;
+  -webkit-transition: -webkit-transform .8s ease-in-out;
+          transition:         transform .8s ease-in-out;
+}
+
+.sitelogo:hover {
+      -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+}
+
+.searchicon {
+        color: transparent;
+           background: #EDFDFB;
+       background-clip: text;
+        -webkit-background-clip: text;
+    font-size: 15px;
+
+}
