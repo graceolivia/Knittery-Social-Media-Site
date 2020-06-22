@@ -1,19 +1,60 @@
 .container{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 50px 1fr 50px;
-    grid-template-areas:
-    "header header header header"
-    "sidebar content content content"
-    "footer  footer  footer footer";
+    height: 100vh;
+    grid-template-columns: [first] 1fr [second] 1fr [third] 1fr [fourth] 1fr [fifth];
+    grid-template-rows: [row1start] 30px [row1end] auto [row3start] 50px [row3end];
 }
 
 .header{
-    grid-area: header;
-    background-color:blue;
+grid-column-start: first;
+  grid-column-end: fifth;
+  grid-row-start: row1start;
+  grid-row-end: row1end;
+  border: 1px solid black;
+    background-color:grey;
     display:flex;
-    justify-content: space-between;
+    flex-wrap: nowrap;
+    font-size: 18;
 }
+
+.header a{
+     text-decoration: none;
+     color:white;
+}
+
+.header ul {
+  list-style: none;
+}
+
+.header li{
+    padding: 20px;
+}
+
+.header li:hover {
+    background:rgba(0,0,0,0.3);
+}
+
+#leftlinks{
+margin-left:auto;
+display: flex;
+}
+
+#rightlinks{
+margin-right:auto;
+display:flex;
+  justify-content: space-between;
+}
+
+#rightlinks > * {
+    margin-right:auto;
+    display:flex;
+}
+
+#leftlinks > * {
+    margin-left:auto;
+    display: flex;
+}
+
 
 .footer{
     grid-area: footer;
@@ -34,27 +75,13 @@
 }
 
 
-.navbar {
-    opacity: 0.8;
-    transition: opacity 1s;
-
-}
-
-.navbar:hover {
-    opacity: 1;
-
-}
-
 body {
      background-color: #EDFDFB;
+      font-family: "Lucida Console", Courier, monospace;
 }
 
 .card {display:inline-block;}
 
-.nav-item:hover{
-    background-color: #67737e;
-    color: #0b0d0e;
-}
 
 .typewriter {
   overflow: hidden;
@@ -72,27 +99,16 @@ body {
   to { width: 100% }
 }
 
-.icon {
+
+.searchicon {
+        color: transparent;
+           background: #EDFDFB;
+       background-clip: text;
+        -webkit-background-clip: text;
+    font-size: 15px;
 
 }
 
-.yarnbig {
-    	color: transparent;
-    	background: rgb(206,183,237);
-background: linear-gradient(90deg, rgba(206,183,237,1) 2%, rgba(238,174,202,1) 44%, rgba(220,221,182,1) 62%, rgba(206,183,237,1) 100%);
-       background-clip: text;
-        -webkit-background-clip: text;
-      font-size: 100px;
-       }
-
-.staricon {
-    color: transparent;
-           background: yellow;
-       background-clip: text;
-        -webkit-background-clip: text;
-    font-size: 60px;
-
-}
 
 .sitelogo {
       border-radius: 50%;
@@ -105,11 +121,3 @@ background: linear-gradient(90deg, rgba(206,183,237,1) 2%, rgba(238,174,202,1) 4
           transform: rotate(360deg);
 }
 
-.searchicon {
-        color: transparent;
-           background: #EDFDFB;
-       background-clip: text;
-        -webkit-background-clip: text;
-    font-size: 15px;
-
-}

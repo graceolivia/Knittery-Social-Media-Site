@@ -5,17 +5,20 @@
 
         <link href="/static/styles.1.css" rel="stylesheet">
 
-<nav class="header">
+
 
 	<title>Knittery: {% block title %}{% endblock %}</title>
 </head>
 <body>
   <div id="container">
-
-  <a href="/"><img src="/static/logo.png" width="50" class="sitelogo"><span style="color:#73C2BE;">Knittery</span></a>
-
-
-    <ul>
+<nav class="header">
+    <div id="leftlinks">
+<ul>
+  <li>
+     <a href="/"><img src="/static/logo.png" width="50" class="sitelogo"></a>
+</li>
+<li>
+  <a href="/">Knittery</a>
   {% if session.user %}
       <li>
         <a href="/projects">Projects</a>
@@ -32,7 +35,8 @@
 {% else %}
     {% endif %}
     </ul>
-    <ul>
+    </div>
+    <ul id="rightlinks">
         {% if session.user %}
         <li><a href="/profile">Profile</a></li>
         <li><a  href="/logout">Log Out</a></li>
@@ -43,9 +47,7 @@
     </ul>
 
 </nav>
-<div class="sidebar">
-  <ul><li>item</li></ul>
-</div>
+
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class=flashes>
@@ -60,6 +62,12 @@
     </ul>
   {% endif %}
 {% endwith %}
+
+<div class="sidebar">
+  <ul><li>item</li></ul>
+</div>
+
+
 	<main>
 	  <div class="content">
 		{% block main %}{% endblock %}
