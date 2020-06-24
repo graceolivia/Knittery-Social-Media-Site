@@ -166,7 +166,10 @@ def profileget(user):
 def userprofile():
     if request.method == "GET":
         username=session["user"]
-        return profileget(username)
+        return redirect(url_for('profileget', user=username))
+    if request.method == "POST":
+        return redirect("/profile/edit")
+
 # def profile():
 #     if request.method == "GET":
 #         if not session.get("user") is None:
@@ -193,8 +196,6 @@ def userprofile():
 #             print("No user logged in.")
 #             flash("No user logged in. Please log in.")
 #             return redirect("/login")
-    if request.method == "POST":
-        return redirect("/profile/edit")
 
 @app.route("/profile/edit", methods=["GET", "POST"])
 def profileedit():
