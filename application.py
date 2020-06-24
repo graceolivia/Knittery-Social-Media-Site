@@ -9,6 +9,15 @@ app.config["SECRET_KEY"] = key()
 
 db = SQL("sqlite:///yarn.db")
 
+
+def getInfo(user):
+    currentuser = session["user"]
+    profile = db.execute("SELECT * FROM users WHERE name = :name",
+    name=currentuser)
+    currentuser_id=profile[0]["id"]
+    return currentuser_id
+
+
 @app.route("/")
 def index():
        return render_template("index.html")
@@ -118,10 +127,32 @@ def register():
 
     return render_template("public/sign_in.html")
 
+@app.route("/profile/<user>")
+def profileget(user):
+    currentuser = user
+    profile = db.execute("SELECT * FROM users WHERE name = :name",
+    name=currentuser)
+    currentuser_id=profile[0]["id"]
+    friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
+    currentuser_id=currentuser_id)
+    print(friends_id)
+    friends=[]
+    fn = 0
+    for entry in friends_id:
+        friendo = db.execute("SELECT name FROM users WHERE users.id = :friends_id",
+        friends_id=friends_id[fn]["friendee"])
+        frien = friendo[0]["name"]
+        friends.append(frien)
+        fn += 1
+    #this only works for one friends! gotta figure out how to do more :)
+    print(friends)
+    return render_template("profile.html", profile=profile, friends=friends)
+
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
     if request.method == "GET":
         if not session.get("user") is None:
+            username=session["user"]
             currentuser = session["user"]
             profile = db.execute("SELECT * FROM users WHERE name = :name",
             name=currentuser)
@@ -208,3 +239,5 @@ def addfriend():
     db.execute("INSERT INTO friends(friender, friendee) VALUES (:currentuser_id, :af_id)", currentuser_id=currentuser_id[0]["id"], af_id=af_id[0]["id"])
     flash(af + " added to friends!")
     return redirect("/profile")
+
+
