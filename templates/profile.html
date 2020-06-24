@@ -15,9 +15,16 @@
 <form action="/profile" method="POST">
 <button type="submit" class="btn btn-dark">Edit</button>
 </form>
-{% else %}
+{% elif isfriend == False %}
 <form action="/addfriend" method="POST">
 <button type="submit" class="btn btn-dark" name="addfriend" value="{{ profile[0]["name"] }}">Add friend</button>
+</form>
+{% else %}
+<p>✅  {{ profile[0]["name"] }}  is in your friends </p>
+
+
+<form action="/removefriend" method="POST">
+<button type="submit" class="btn btn-outline-dark btn-sm" name="removefriend" value="{{ profile[0]["name"] }}">Remove friend</button>
 </form>
 {% endif %}
 

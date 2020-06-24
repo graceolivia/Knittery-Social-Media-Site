@@ -144,37 +144,55 @@ def profileget(user):
         frien = friendo[0]["name"]
         friends.append(frien)
         fn += 1
-    #this only works for one friends! gotta figure out how to do more :)
     print(friends)
-    return render_template("profile.html", profile=profile, friends=friends)
+
+    #if not viewing own profile, see if current profile owner is one of your friends
+    isfriend = False
+    if currentuser != session["user"]:
+        loggedinUser = db.execute("SELECT * FROM users WHERE name = :name",
+        name=session["user"])
+        loggedinUser_id = loggedinUser[0]["id"]
+        print("Accessing the profile that is not your own Profile.")
+        friendquery = db.execute("SELECT * FROM friends WHERE friender = :loggedinUser_id AND friendee = :currentuser_id",
+        loggedinUser_id = loggedinUser_id, currentuser_id=currentuser_id)
+        if len(friendquery) == 0:
+            print("not friends")
+        else:
+            isfriend = True
+            print(friendquery)
+    return render_template("profile.html", profile=profile, friends=friends, isfriend=isfriend)
 
 @app.route("/profile", methods=["GET", "POST"])
-def profile():
+def userprofile():
     if request.method == "GET":
-        if not session.get("user") is None:
-            username=session["user"]
-            currentuser = session["user"]
-            profile = db.execute("SELECT * FROM users WHERE name = :name",
-            name=currentuser)
-            currentuser_id=profile[0]["id"]
-            friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
-            currentuser_id=currentuser_id)
-            print(friends_id)
-            friends=[]
-            fn = 0
-            for entry in friends_id:
-                friendo = db.execute("SELECT name FROM users WHERE users.id = :friends_id",
-                friends_id=friends_id[fn]["friendee"])
-                frien = friendo[0]["name"]
-                friends.append(frien)
-                fn += 1
-            #this only works for one friends! gotta figure out how to do more :)
-            print(friends)
-            return render_template("profile.html", profile=profile, friends=friends)
-        else:
-            print("No user logged in.")
-            flash("No user logged in. Please log in.")
-            return redirect("/login")
+        username=session["user"]
+        return profileget(username)
+# def profile():
+#     if request.method == "GET":
+#         if not session.get("user") is None:
+#             username=session["user"]
+#             currentuser = session["user"]
+#             profile = db.execute("SELECT * FROM users WHERE name = :name",
+#             name=currentuser)
+#             currentuser_id=profile[0]["id"]
+#             friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
+#             currentuser_id=currentuser_id)
+#             print(friends_id)
+#             friends=[]
+#             fn = 0
+#             for entry in friends_id:
+#                 friendo = db.execute("SELECT name FROM users WHERE users.id = :friends_id",
+#                 friends_id=friends_id[fn]["friendee"])
+#                 frien = friendo[0]["name"]
+#                 friends.append(frien)
+#                 fn += 1
+#             #this only works for one friends! gotta figure out how to do more :)
+#             print(friends)
+#             return render_template("profile.html", profile=profile, friends=friends)
+#         else:
+#             print("No user logged in.")
+#             flash("No user logged in. Please log in.")
+#             return redirect("/login")
     if request.method == "POST":
         return redirect("/profile/edit")
 
@@ -238,6 +256,16 @@ def addfriend():
     af_id = db.execute("SELECT id FROM users WHERE name = :af", af=af)
     db.execute("INSERT INTO friends(friender, friendee) VALUES (:currentuser_id, :af_id)", currentuser_id=currentuser_id[0]["id"], af_id=af_id[0]["id"])
     flash(af + " added to friends!")
-    return redirect("/profile")
+    return redirect(request.referrer)
+
+@app.route("/removefriend", methods=["POST"])
+def removefriend():
+    af = request.form.get("removefriend")
+    currentuser = session["user"]
+    currentuser_id = db.execute("SELECT id FROM users WHERE name = :currentuser", currentuser=currentuser)
+    af_id = db.execute("SELECT id FROM users WHERE name = :af", af=af)
+    db.execute("DELETE FROM friends WHERE friender = :currentuser_id AND friendee = :af_id", currentuser_id=currentuser_id[0]["id"], af_id=af_id[0]["id"])
+    flash(af + " removed from friends!")
+    return redirect(request.referrer)
 
 
