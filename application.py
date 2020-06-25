@@ -20,7 +20,10 @@ def getInfo(user):
 
 @app.route("/")
 def index():
-       return render_template("index.html")
+    if session.get('user') is None:
+        return render_template("coverpage.html")
+    else:
+        return render_template("index.html")
 
 
 @app.route("/projects", methods=["GET", "POST"])

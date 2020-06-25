@@ -15,6 +15,11 @@
 font-family: 'Bungee Shade', cursive;
 }
 
+.signin{
+    margin: 10% 0px;
+    padding: 30px;
+}
+
 body {
      background-color: black;
      color: white;
