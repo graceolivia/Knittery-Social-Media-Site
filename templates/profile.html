@@ -4,11 +4,17 @@
 {{ profile[0]["name"] }}'s Profile
 {% endblock %}
 {% block main %}
-<h1>{{ profile[0]["name"] }}</h1>
-<ul>
-<li>Years knitting: {{ profile[0]["years_knitting"] }}</li>
-<li>Favorite Color: {{ profile[0]["favorite_color"] }}</li>
-<li>About Me: {{ profile[0]["about_me"]}}</li>
+
+
+  <div class="row">
+    <div class="col-8">
+
+        <h1>{{ profile[0]["name"] }}</h1>
+
+  <ul>
+<li><b>Years knitting:</b> {{ profile[0]["years_knitting"] }}</li>
+<li><b>Favorite Color:</b> {{ profile[0]["favorite_color"] }}</li>
+<li><b>About Me:</b> {{ profile[0]["about_me"]}}</li>
 </ul>
 
 {% if profile[0]["name"] == session['user'] %}
@@ -24,10 +30,16 @@
 
 
 <form action="/removefriend" method="POST">
-<button type="submit" class="btn btn-outline-dark btn-sm" name="removefriend" value="{{ profile[0]["name"] }}">Remove friend</button>
+<button type="submit" class="btn btn-outline-secondary btn-sm" name="removefriend" value="{{ profile[0]["name"] }}">Remove friend</button>
 </form>
 {% endif %}
+<br>
+</div>
 
+
+<div class="col">
+        <div class="card text-white bg-dark">
+            <div class="card-body">
 <h2>{{ profile[0]["name"] }}'s Friends</h2>
 
 <ul>
@@ -35,6 +47,14 @@
     <li><a href="/profile/{{ friend }}">{{ friend }}</a></li>
     {% endfor %}
 </ul>
+</div>
+</div>
+    </div>
+  </div>
+
+
+
+
 
 
 

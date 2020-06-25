@@ -1,7 +1,7 @@
 .navbar {
     opacity: 0.8;
     transition: opacity 1s;
-
+      border-bottom: 1px solid white;
 }
 
 .navbar:hover {
@@ -10,10 +10,15 @@
 }
 
 body {
-     background-color: #EDFDFB;
+     background-color: black;
+     color: white;
 }
 
 .card {display:inline-block;}
+.card a {
+    color: white;
+    text-decoration: underline;
+}
 
 .nav-item:hover{
     background-color: #67737e;

@@ -32,18 +32,32 @@ Yarn.
     <hr></hr>
 <h2>Your Stash.</h2>
 <p>Here's what you've got in the stash:</p>
-{% for row in rows %}
-<div class="card mb-3" style="width: 18rem;">
-  <div class="card-header">
-    {{ row["name"] }}
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Fiber: {{ row["fiber"] }}</li>
-    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>
-    <li class="list-group-item">Weight: {{ row["weight"] }}</li>
-  </ul>
-</div>
-{% endfor %}
+<!--{% for row in rows %}-->
+<!--<div class="card mb-3" style="width: 18rem;">-->
+<!--  <div class="card-header">-->
+<!--    {{ row["name"] }}-->
+<!--  </div>-->
+<!--  <ul class="list-group list-group-flush">-->
+<!--    <li class="list-group-item">Fiber: {{ row["fiber"] }}</li>-->
+<!--    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>-->
+<!--    <li class="list-group-item">Weight: {{ row["weight"] }}</li>-->
+<!--  </ul>-->
+<!--</div>-->
+<!--{% endfor %}-->
 
+
+
+{% for row in rows %}
+<div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+  <div class="card-header">{{ row["name"] }}</div>
+  <div class="card-body">
+    <ul>
+    <li>Fiber: {{ row["fiber"] }}</li>
+    <li>Yardage: {{ row["yardage"] }}</li>
+    <li>Weight: {{ row["weight"] }}</li>
+  </ul>
+  </div>
+  </div>
+{% endfor %}
 
 {% endblock %}

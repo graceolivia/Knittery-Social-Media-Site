@@ -22,16 +22,19 @@ Projects.
     <hr></hr>
 <h2>Your projects.</h2>
 <p>Here's what you have been working on:</p>
+
+
+
 {% for row in rows %}
-<div class="card mb-3" style="width: 18rem;">
-  <div class="card-header">
-    {{ row["name"] }}
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Fiber: {{ row["yarn"] }}</li>
-    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>
-    <li class="list-group-item">Weight: {{ row["notes"] }}</li>
+<div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+  <div class="card-header">{{ row["name"] }}</div>
+  <div class="card-body">
+    <ul>
+    <li class>Fiber: {{ row["yarn"] }}</li>
+    <li class>Yardage: {{ row["yardage"] }}</li>
+    <li class>Weight: {{ row["notes"] }}</li>
   </ul>
-</div>
+  </div>
+  </div>
 {% endfor %}
 {% endblock %}

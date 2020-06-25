@@ -45,19 +45,21 @@ Yarn.
 </div><br>
 <hr>
 <h2>Browse All Pattern on Knittery:</h2>
+
+
 {% for row in rows %}
-<div class="card mb-3" style="width: 18rem;">
-  <div class="card-header">
-    {{ row["name"] }}
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Author: {{ row["author"] }}</li>
-    <li class="list-group-item">Weight: {{ row["weight"] }}</li>
-    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>
-    <li class="list-group-item">Sizes: {{ row["sizes_available"] }}</li>
-    <li class="list-group-item">Needle Size: {{ row["needle_size"] }}</li>
+<div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+  <div class="card-header">{{ row["name"] }}</div>
+  <div class="card-body">
+    <ul>
+    <li>Author: {{ row["author"] }}</li>
+    <li>Weight: {{ row["weight"] }}</li>
+    <l>Yardage: {{ row["yardage"] }}</li>
+    <li>Sizes: {{ row["sizes_available"] }}</li>
+    <li>Needle Size: {{ row["needle_size"] }}</li>
   </ul>
-</div>
+  </div>
+  </div>
 {% endfor %}
 
 

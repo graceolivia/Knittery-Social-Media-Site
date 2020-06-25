@@ -122,7 +122,7 @@ def register():
             row = db.execute("SELECT name FROM users WHERE name = :name", name=name)
             session["user"] = row[0]["name"]
             print(session)
-            print("Registered!")
+            flash("Registered! Welcome to Knittery. Go to your profile to add more information about you.")
             return redirect("/")
 
     return render_template("public/sign_in.html")
