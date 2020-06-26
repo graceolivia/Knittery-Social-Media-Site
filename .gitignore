@@ -1,2 +1,7 @@
 yarn.db
 key.py
+# exclude everything
+static/profilepics/uploads/*
+
+# exception to the rule
+!static/profilepics/uploads/.gitkeep
