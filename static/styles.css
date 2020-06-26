@@ -11,6 +11,11 @@
 
 }
 
+.navbar .nav-link {
+    color: white !important;
+
+}
+
 .splash{
     font-size: 70px;
     margin: 10% 0;
@@ -29,7 +34,8 @@ html {
     transform: scale(1);
     opacity: 1;
     -webkit-transition: opacity .8s ease, -webkit-transform 1.4s ease;
-    transition: opacity .8s ease, transform 1.4s ease
+    transition: opacity .8s ease, transform 1.4s ease;
+     pointer-events: all;
 }
 
 #particles-js {
@@ -45,10 +51,11 @@ html {
 font-family: 'Bungee Shade', cursive;
 }
 
+
 .signin{
     margin: 10% 0px;
     padding: 30px;
-     box-shadow: 10px 10px grey;
+     box-shadow: 5px 5px 10px grey;
      z-index : 999;
 }
 
@@ -67,6 +74,11 @@ body {
 .nav-item:hover{
     background-color: #67737e;
     color: #0b0d0e;
+}
+
+.profilepic{
+       border: 2px solid white;
+       border-radius: 20%;
 }
 
 .typewriter {

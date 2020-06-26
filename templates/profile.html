@@ -7,7 +7,11 @@
 
 
   <div class="row">
-    <div class="col-8">
+      <div class="col-2">
+          <img src="{{ profile[0]["pic"] }}" class="profilepic" width="150">
+          </div>
+    <div class="col-6">
+
 
         <h1>{{ profile[0]["name"] }}</h1>
 
@@ -37,7 +41,8 @@
 </div>
 
 
-<div class="col">
+<div class="col-4">
+
         <div class="card text-white bg-dark">
             <div class="card-body">
 <h2>{{ profile[0]["name"] }}'s Friends</h2>

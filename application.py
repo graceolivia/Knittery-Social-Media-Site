@@ -1,35 +1,51 @@
 #FLASK_DEBUG=1
+import os
 from cs50 import SQL
 from flask import Flask, render_template, request, redirect, session, url_for, flash
+from werkzeug.utils import secure_filename
 from key import key
 
+UPLOAD_FOLDER = "static/profilepics/uploads"
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config["SECRET_KEY"] = key()
 
 
 db = SQL("sqlite:///yarn.db")
 
+# non-route functions
 
-def getInfo(user):
+def getId(user):
     currentuser = session["user"]
     profile = db.execute("SELECT * FROM users WHERE name = :name",
     name=currentuser)
     currentuser_id=profile[0]["id"]
     return currentuser_id
 
+def is_allowed(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# routes
+
+@app.route("/welcome")
+def welcome():
+    return render_template("coverpage.html")
 
 @app.route("/")
 def index():
     if session.get('user') is None:
-        return render_template("coverpage.html")
+        return redirect("/welcome")
     else:
         return render_template("index.html")
 
 
 @app.route("/projects", methods=["GET", "POST"])
 def projects():
-    userFinder = db.execute("SELECT id FROM users WHERE name = :name", name = session["user"])
-    user_id = userFinder[0]["id"]
+    user_id = getId(session["user"])
     if request.method == "GET":
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
         return render_template("projects.html", rows=rows)
@@ -44,8 +60,7 @@ def projects():
 
 @app.route("/yarn", methods=["GET", "POST"])
 def yarn():
-    userFinder = db.execute("SELECT id FROM users WHERE name = :name", name = session["user"])
-    user_id = userFinder[0]["id"]
+    user_id = getId(session["user"])
     if request.method == "GET":
         rows = db.execute("SELECT name, yardage, fiber, weight FROM yarn WHERE user_id = :id GROUP BY name", id = user_id)
         return render_template("yarn.html", rows=rows)
@@ -60,8 +75,7 @@ def yarn():
 
 @app.route("/patterns", methods=["GET", "POST"])
 def patterns():
-    userFinder = db.execute("SELECT id FROM users WHERE name = :name", name = session["user"])
-    user_id = userFinder[0]["id"]
+    user_id = getId(session["user"])
     if request.method == "GET":
         rows = db.execute("SELECT name, author, weight, sizes_available, needle_size, published FROM patterns")
         return render_template("patterns.html", rows=rows)
@@ -135,7 +149,7 @@ def profileget(user):
     currentuser = user
     profile = db.execute("SELECT * FROM users WHERE name = :name",
     name=currentuser)
-    currentuser_id=profile[0]["id"]
+    currentuser_id=getId(session["user"])
     friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
     currentuser_id=currentuser_id)
     print(friends_id)
@@ -173,33 +187,6 @@ def userprofile():
     if request.method == "POST":
         return redirect("/profile/edit")
 
-# def profile():
-#     if request.method == "GET":
-#         if not session.get("user") is None:
-#             username=session["user"]
-#             currentuser = session["user"]
-#             profile = db.execute("SELECT * FROM users WHERE name = :name",
-#             name=currentuser)
-#             currentuser_id=profile[0]["id"]
-#             friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
-#             currentuser_id=currentuser_id)
-#             print(friends_id)
-#             friends=[]
-#             fn = 0
-#             for entry in friends_id:
-#                 friendo = db.execute("SELECT name FROM users WHERE users.id = :friends_id",
-#                 friends_id=friends_id[fn]["friendee"])
-#                 frien = friendo[0]["name"]
-#                 friends.append(frien)
-#                 fn += 1
-#             #this only works for one friends! gotta figure out how to do more :)
-#             print(friends)
-#             return render_template("profile.html", profile=profile, friends=friends)
-#         else:
-#             print("No user logged in.")
-#             flash("No user logged in. Please log in.")
-#             return redirect("/login")
-
 @app.route("/profile/edit", methods=["GET", "POST"])
 def profileedit():
     currentuser = session["user"]
@@ -217,6 +204,36 @@ def profileedit():
         db.execute("UPDATE users SET years_knitting = :years_knitting, favorite_color = :favorite_color, about_me = :about_me WHERE name = :name;",
         years_knitting=years_knitting, favorite_color=favorite_color, about_me=about_me, name=currentuser)
         return redirect("/profile")
+
+@app.route("/profile/upload", methods=["GET", "POST"])
+def profileupload():
+    if request.method == "POST":
+        if 'file' not in request.files:
+            flash('No file part')
+            print('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('Please upload a file')
+            print('Please upload a file')
+            return redirect(request.url)
+        if file and is_allowed(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print(filename)
+            location = "/static/profilepics/uploads/"
+            newpiclocation = location + filename
+            print(newpiclocation)
+            db.execute("UPDATE users SET pic = :newpiclocation WHERE name = :name",
+            newpiclocation=newpiclocation, name=session["user"])
+            flash('Profile pic uploaded!')
+            print('Profile pic uploaded!')
+            return redirect("/profile")
+        return("done")
+    if request.method == "GET":
+        return redirect("/profile/edit")
+
+
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():

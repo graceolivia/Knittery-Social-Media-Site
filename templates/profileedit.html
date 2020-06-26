@@ -4,7 +4,13 @@
 Edit Profile
 {% endblock %}
 {% block main %}
-<h1>{{ profile[0]["name"] }}</h1>
+<h1>Update {{ profile[0]["name"] }}'s Profile</h1>
+
+<p>Upload new profile picture</p>
+<form action="/profile/upload" method="POST" enctype="multipart/form-data" >
+    <input type="file" name="file">
+<button type="submit">Upload</button>
+</form>
 
 
 <form action="/profile/edit" method="POST">
