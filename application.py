@@ -31,7 +31,7 @@ def is_allowed(filename):
 
 # routes
 
-@app.route("/welcome")
+@app.route("/welcome") 
 def welcome():
     return render_template("coverpage.html")
 
