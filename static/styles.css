@@ -76,9 +76,16 @@ body {
     color: #0b0d0e;
 }
 
+/*profile section*/
+
 .profilepic{
        border: 2px solid white;
        border-radius: 20%;
+}
+
+.proftable{
+    width:80%;
+    margin: 30px 10px;
 }
 
 .typewriter {

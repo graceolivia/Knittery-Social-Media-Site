@@ -19,7 +19,7 @@ db = SQL("sqlite:///yarn.db")
 # non-route functions
 
 def getId(user):
-    currentuser = session["user"]
+    currentuser = user
     profile = db.execute("SELECT * FROM users WHERE name = :name",
     name=currentuser)
     currentuser_id=profile[0]["id"]
@@ -31,7 +31,7 @@ def is_allowed(filename):
 
 # routes
 
-@app.route("/welcome") 
+@app.route("/welcome")
 def welcome():
     return render_template("coverpage.html")
 
@@ -146,10 +146,12 @@ def register():
 
 @app.route("/profile/<user>")
 def profileget(user):
-    currentuser = user
     profile = db.execute("SELECT * FROM users WHERE name = :name",
-    name=currentuser)
+    name=user)
     currentuser_id=getId(session["user"])
+    profile_id=getId(user)
+    print(profile_id)
+    #get friends
     friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
     currentuser_id=currentuser_id)
     print(friends_id)
@@ -163,13 +165,18 @@ def profileget(user):
         fn += 1
     print(friends)
 
+    #get number of projects and stashed items
+    projects = db.execute("SELECT * FROM projects WHERE user_id = :user_id", user_id=profile_id)
+    stashed = db.execute("SELECT * FROM yarn WHERE user_id = :user_id GROUP BY name", user_id=profile_id)
+    nprojects = len(projects)
+    nstashed = len(stashed)
+
     #if not viewing own profile, see if current profile owner is one of your friends
     isfriend = False
-    if currentuser != session["user"]:
+    if user != session["user"]:
         loggedinUser = db.execute("SELECT * FROM users WHERE name = :name",
         name=session["user"])
         loggedinUser_id = loggedinUser[0]["id"]
-        print("Accessing the profile that is not your own Profile.")
         friendquery = db.execute("SELECT * FROM friends WHERE friender = :loggedinUser_id AND friendee = :currentuser_id",
         loggedinUser_id = loggedinUser_id, currentuser_id=currentuser_id)
         if len(friendquery) == 0:
@@ -177,7 +184,7 @@ def profileget(user):
         else:
             isfriend = True
             print(friendquery)
-    return render_template("profile.html", profile=profile, friends=friends, isfriend=isfriend)
+    return render_template("profile.html", profile=profile, friends=friends, isfriend=isfriend, nprojects=nprojects, nstashed=nstashed)
 
 @app.route("/profile", methods=["GET", "POST"])
 def userprofile():
