@@ -44,8 +44,8 @@
 <div class="col-4">
 <div> <table class="proftable">
   <tr>
-    <td>Projects: {{ nprojects }}</td>
-    <td>Stashed: {{ nstashed }} </td>
+    <td>Projects: <a href="/projects/{{ profile[0]["name"] }}"> {{ nprojects }}</a></td>
+    <td>Stashed: <a href="/yarn/{{ profile[0]["name"] }}">{{ nstashed }} </a></td>
   </tr>
 
 </table> </div>

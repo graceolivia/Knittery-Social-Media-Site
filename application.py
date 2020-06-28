@@ -43,9 +43,9 @@ def index():
         return render_template("index.html")
 
 
-@app.route("/projects", methods=["GET", "POST"])
-def projects():
-    user_id = getId(session["user"])
+@app.route("/projects/<user>", methods=["GET", "POST"])
+def projects(user):
+    user_id = getId(user)
     if request.method == "GET":
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
         return render_template("projects.html", rows=rows)
@@ -58,9 +58,9 @@ def projects():
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
         return render_template("projects.html", rows=rows)
 
-@app.route("/yarn", methods=["GET", "POST"])
-def yarn():
-    user_id = getId(session["user"])
+@app.route("/yarn/<user>", methods=["GET", "POST"])
+def yarn(user):
+    user_id = getId(user)
     if request.method == "GET":
         rows = db.execute("SELECT name, yardage, fiber, weight FROM yarn WHERE user_id = :id GROUP BY name", id = user_id)
         return render_template("yarn.html", rows=rows)
@@ -75,8 +75,8 @@ def yarn():
 
 @app.route("/patterns", methods=["GET", "POST"])
 def patterns():
-    user_id = getId(session["user"])
     if request.method == "GET":
+        print("trying")
         rows = db.execute("SELECT name, author, weight, sizes_available, needle_size, published FROM patterns")
         return render_template("patterns.html", rows=rows)
     if request.method == "POST":
