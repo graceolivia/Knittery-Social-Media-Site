@@ -269,7 +269,7 @@ def search():
         if (tosearch == "projects"):
             return render_template("projects.html", rows=results)
         if (tosearch == "users"):
-            return render_template("profile.html", profile=results)
+            return redirect(url_for('profileget', user=results[0]["name"]))
         if (tosearch == "yarn"):
             return render_template("yarn.html", rows=results)
         return redirect("/search")
