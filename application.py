@@ -48,7 +48,7 @@ def projects(user):
     user_id = getId(user)
     if request.method == "GET":
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
-        return render_template("projects.html", rows=rows)
+        return render_template("projects.html", rows=rows, user=user)
     if request.method == "POST":
         name = request.form.get("name")
         yarn = request.form.get("yarn")
@@ -56,7 +56,6 @@ def projects(user):
         notes = request.form.get("notes")
         db.execute("INSERT INTO projects(name, yarn, yardage, notes, user_id) VALUES (:name, :yarn, :yardage, :notes, :user_id)", name=name, yarn=yarn, yardage=yardage, notes=notes, user_id=user_id)
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
-        print(user)
         return render_template("projects.html", rows=rows, user=user)
 
 @app.route("/yarn/<user>", methods=["GET", "POST"])
