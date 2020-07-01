@@ -26,6 +26,13 @@ def getId(user):
     return currentuser_id
 
 
+def getUsername(id):
+        profile = db.execute("SELECT * FROM users WHERE id = :id",
+        id=id)
+        name = profile[0]["name"]
+        return name
+
+
 def is_allowed(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -275,14 +282,19 @@ def search():
             flash("No results found with that query!")
             return redirect("/search")
         print(results)
-        if (tosearch == "patterns"):
-            return render_template("patterns.html", rows=results)
+        # if (tosearch == "patterns"):
+        #     return render_template("patterns.html", rows=results)
         if (tosearch == "projects"):
-            return render_template("projects.html", rows=results)
+            for result in results:
+                print(getUsername(result["user_id"]))
+                # need to add the username to result
+                result["uname"] = getUsername(result["user_id"])
+            puser = db.execute("SELECT name FROM users WHERE id=:user_id", user_id=int(results[0]["user_id"]))
+            return render_template("search.html", results=results, puser=puser)
         if (tosearch == "users"):
             return redirect(url_for('profileget', user=results[0]["name"]))
-        if (tosearch == "yarn"):
-            return render_template("yarn.html", rows=results)
+        # if (tosearch == "yarn"):
+        #     return render_template("yarn.html", rows=results)
         return redirect("/search")
     if request.method == "GET":
         return render_template("search.html")

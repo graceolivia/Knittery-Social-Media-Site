@@ -33,14 +33,9 @@ Search
       </form>
 {% if results %}
 {% for result in results %}
-<div class="card mb-3" style="width: 18rem;">
-  <div class="card-header">
 
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">    {{ results["result"] }}</li>
-    <li class="list-group-item"></li>
-    <li class="list-group-item"></li>
+  <ul>
+    <li><a href="/projects/{{ result["uname"] }}/{{ result["name"] }}"> {{ result["name"] }}</a></li>
   </ul>
 </div>
 {% endfor %}
