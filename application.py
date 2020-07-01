@@ -75,6 +75,14 @@ def yarn(user):
         rows = db.execute("SELECT name, yardage, fiber, weight FROM yarn WHERE user_id = :id GROUP BY name", id = user_id)
         return render_template("yarn.html")
 
+
+@app.route("/projects/<user>/<project>", methods=["GET"])
+def projectspages(user, project):
+    user_id = getId(user)
+    rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
+    return render_template("projectpage.html", rows=rows, user=user)
+
+
 @app.route("/patterns", methods=["GET", "POST"])
 def patterns():
     if request.method == "GET":
