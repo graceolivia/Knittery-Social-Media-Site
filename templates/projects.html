@@ -5,6 +5,7 @@ Projects.
 {% endblock %}
 {% block main %}
 <h1>Projects</h1>
+  {% if session.user==user %}
 <h2>Submit new project.</h2>
   <a class="btn btn-dark" data-toggle="collapse" href="#newProject" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">New Project</a>
  <div class="collapse multi-collapse" id="newProject">
@@ -20,6 +21,8 @@ Projects.
     </div>
     <br>
     <hr></hr>
+{% else %}
+    {% endif %}
 <h2>{{ user }}'s projects.</h2>
 <p>Here's what {{ user }} has been working on:</p>
 
@@ -27,7 +30,7 @@ Projects.
 
 {% for row in rows %}
 <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
-  <div class="card-header">{{ row["name"] }}</div>
+  <div class="card-header"><a href="/projects/{{ user }}/{{ row["name"] }}">{{ row["name"] }}</a></div>
   <div class="card-body">
     <ul>
     <li class>Fiber: {{ row["yarn"] }}</li>
