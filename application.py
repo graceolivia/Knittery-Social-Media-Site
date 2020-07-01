@@ -24,7 +24,7 @@ def getId(user):
     name=currentuser)
     currentuser_id=profile[0]["id"]
     return currentuser_id
-    
+
 
 def is_allowed(filename):
     return '.' in filename and \
@@ -59,8 +59,7 @@ def projects(user):
         notes = request.form.get("notes")
         db.execute("INSERT INTO projects(name, yarn, yardage, notes, user_id) VALUES (:name, :yarn, :yardage, :notes, :user_id)", name=name, yarn=yarn, yardage=yardage, notes=notes, user_id=user_id)
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id=c_userid)
-        return redirect("/projects/<user>")
-
+        return redirect(url_for('projects', user=session["user"]))
 @app.route("/yarn/<user>", methods=["GET", "POST"])
 def yarn(user):
     user_id = getId(user)
@@ -263,6 +262,7 @@ def search():
         print(search)
         results = db.execute("SELECT * FROM :tosearch WHERE name LIKE :search",
         tosearch=tosearch, search=search)
+        print(results)
         if len(results) == 0:
             flash("No results found with that query!")
             return redirect("/search")
