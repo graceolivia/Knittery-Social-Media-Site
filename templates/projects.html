@@ -8,7 +8,7 @@ Projects.
 <h2>Submit new project.</h2>
   <a class="btn btn-dark" data-toggle="collapse" href="#newProject" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">New Project</a>
  <div class="collapse multi-collapse" id="newProject">
-<form action="/projects" method="post">
+<form action="/projects/{{ session["user"] }}" method="post">
         <div class="form-group">
             <input class="form-control" name="name" placeholder="Pattern name (required)" type="text" required>
             <input class="form-control" name="yarn" placeholder="Yarn" type="text">
