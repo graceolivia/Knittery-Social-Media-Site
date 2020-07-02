@@ -275,8 +275,10 @@ def search():
         search = request.form.get("search")
         print(tosearch)
         print(search)
+        searchwild = "%" + search + "%"
+        print(searchwild)
         results = db.execute("SELECT * FROM :tosearch WHERE name LIKE :search",
-        tosearch=tosearch, search=search)
+        tosearch=tosearch, search=searchwild)
         print(results)
         if len(results) == 0:
             flash("No results found with that query!")
