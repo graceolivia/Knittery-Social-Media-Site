@@ -3,6 +3,7 @@ import os
 from cs50 import SQL
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from key import key
 
 UPLOAD_FOLDER = "static/profilepics/uploads"
@@ -297,8 +298,8 @@ def search():
             return render_template("search.html", results=results, puser=puser)
         if (tosearch == "users"):
             return redirect(url_for('profileget', user=results[0]["name"]))
-        # if (tosearch == "yarn"):
-        #     return render_template("yarn.html", rows=results)
+        if (tosearch == "yarn"):
+            return render_template("yarn.html", rows=results)
         return redirect("/search")
     if request.method == "GET":
         return render_template("search.html")
@@ -322,5 +323,3 @@ def removefriend():
     db.execute("DELETE FROM friends WHERE friender = :currentuser_id AND friendee = :af_id", currentuser_id=currentuser_id[0]["id"], af_id=af_id[0]["id"])
     flash(af + " removed from friends!")
     return redirect(request.referrer)
-
-
