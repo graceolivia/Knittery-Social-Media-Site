@@ -209,6 +209,7 @@ def userprofile():
         username=session["user"]
         return redirect(url_for('profileget', user=username))
     if request.method == "POST":
+        print(' why are we poast')
         return redirect("/profile/edit")
 
 @app.route("/profile/edit", methods=["GET", "POST"])
@@ -232,6 +233,7 @@ def profileedit():
 @app.route("/profile/upload", methods=["GET", "POST"])
 def profileupload():
     if request.method == "POST":
+        print("HELLOOO")
         if 'file' not in request.files:
             flash('No file part')
             print('No file part')
