@@ -126,9 +126,10 @@ def login():
         else:
             pwhash = db.execute("SELECT hash FROM users WHERE name = :name",
             name=request.form.get("name"))
-            checker = check_password_hash(pwhash, password)
+            checker = check_password_hash(pwhash[0]["hash"], password)
             print(pwhash)
             print(password)
+            print(checker)
         if checker == False:
             flash("Incorrect password")
             return redirect("/login")
