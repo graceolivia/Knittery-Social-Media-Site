@@ -1,4 +1,6 @@
 #FLASK_DEBUG=1
+#export FLASK_APP=application
+#export FLASK_ENV=development
 import os
 from cs50 import SQL
 from flask import Flask, render_template, request, redirect, session, url_for, flash
@@ -122,10 +124,12 @@ def login():
             print("Username not found!")
             return redirect("/login")
         else:
-            passw0rd = db.execute("SELECT password FROM users WHERE name = :name",
+            pwhash = db.execute("SELECT hash FROM users WHERE name = :name",
             name=request.form.get("name"))
-            passcode = passw0rd[0]['password']
-        if passcode != password:
+            checker = check_password_hash(pwhash, password)
+            print(pwhash)
+            print(password)
+        if checker == False:
             flash("Incorrect password")
             return redirect("/login")
         else:
@@ -152,8 +156,25 @@ def register():
         if password != passwordconfirm:
             flash("Make sure passwords match")
             return redirect("/register")
+        if len(password) < 10:
+            flash("Password must be at least 10 characters long")
+            return redirect("/register")
+        has_digit = False
+        for character in password:
+            if character.isdigit():
+                has_digit = True
+        if has_digit==False:
+            flash("Password must contain number")
+            return redirect("/register")
+        if str.isalnum(password)==True:
+            flash("Password must contain non-alphanumeric character")
+            return redirect("/register")
+        if password != passwordconfirm:
+            flash("Make sure passwords match")
+            return redirect("/register")
         else:
-            db.execute("INSERT INTO users(name, password) VALUES (:name, :password)", name=name, password=password)
+            hash=generate_password_hash(password)
+            db.execute("INSERT INTO users(name, hash) VALUES (:name, :hash)", name=name, hash=hash)
             row = db.execute("SELECT name FROM users WHERE name = :name", name=name)
             session["user"] = row[0]["name"]
             print(session)
