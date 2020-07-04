@@ -21,6 +21,7 @@ db = SQL("sqlite:///yarn.db")
 
 # non-route functions
 
+
 def getId(user):
     currentuser = user
     profile = db.execute("SELECT * FROM users WHERE name = :name",
@@ -74,6 +75,7 @@ def projects(user):
 def yarn(user):
     user_id = getId(user)
     if request.method == "GET":
+
         rows = db.execute("SELECT name, yardage, fiber, weight FROM yarn WHERE user_id = :id GROUP BY name", id = user_id)
         return render_template("yarn.html", rows=rows)
     if request.method == "POST":
