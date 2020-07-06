@@ -321,17 +321,15 @@ def search():
         print(results)
         # if (tosearch == "patterns"):
         #     return render_template("patterns.html", rows=results)
-        if (tosearch == "projects"):
+        if (tosearch == "projects" or tosearch == "yarn"):
             for result in results:
                 print(getUsername(result["user_id"]))
                 # need to add the username to result
                 result["uname"] = getUsername(result["user_id"])
-            puser = db.execute("SELECT name FROM users WHERE id=:user_id", user_id=int(results[0]["user_id"]))
-            return render_template("search.html", results=results, puser=puser)
+            puser = db.execute("SELECT name FROM :tosearch WHERE id=:user_id", user_id=int(results[0]["user_id"]), tosearch=tosearch)
+            return render_template("search.html", results=results, puser=puser, tosearch=tosearch)
         if (tosearch == "users"):
             return redirect(url_for('profileget', user=results[0]["name"]))
-        if (tosearch == "yarn"):
-            return render_template("yarn.html", rows=results)
         return redirect("/search")
     if request.method == "GET":
         return render_template("search.html")

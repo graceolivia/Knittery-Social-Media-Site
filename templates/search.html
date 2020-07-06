@@ -35,7 +35,7 @@ Search
 {% for result in results %}
 
   <ul>
-    <li><a href="/projects/{{ result["uname"] }}/{{ result["name"] }}"> {{ result["name"] }}</a></li>
+    <li><a href="/{{ tosearch }}/{{ result["uname"] }}/{{ result["name"] }}"> {{ result["name"] }}</a></li>
   </ul>
 </div>
 {% endfor %}
