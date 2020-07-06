@@ -71,13 +71,20 @@ def projects(user):
         db.execute("INSERT INTO projects(name, yarn, yardage, notes, user_id) VALUES (:name, :yarn, :yardage, :notes, :user_id)", name=name, yarn=yarn, yardage=yardage, notes=notes, user_id=user_id)
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id=c_userid)
         return redirect(url_for('projects', user=session["user"]))
+
+@app.route("/projects/<user>/<project>", methods=["GET"])
+def projectspages(user, project):
+    user_id = getId(user)
+    rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
+    return render_template("projectpage.html", rows=rows, user=user)
+
+
 @app.route("/yarn/<user>", methods=["GET", "POST"])
 def yarn(user):
     user_id = getId(user)
     if request.method == "GET":
-
         rows = db.execute("SELECT name, yardage, fiber, weight FROM yarn WHERE user_id = :id GROUP BY name", id = user_id)
-        return render_template("yarn.html", rows=rows)
+        return render_template("yarn.html", rows=rows, user=user)
     if request.method == "POST":
         name = request.form.get("name")
         yardage = request.form.get("yardage")
@@ -87,12 +94,12 @@ def yarn(user):
         rows = db.execute("SELECT name, yardage, fiber, weight FROM yarn WHERE user_id = :id GROUP BY name", id = user_id)
         return render_template("yarn.html")
 
-
-@app.route("/projects/<user>/<project>", methods=["GET"])
-def projectspages(user, project):
+@app.route("/yarn/<user>/<yarn>", methods=["GET"])
+def yarnpages(user, yarn):
     user_id = getId(user)
-    rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
-    return render_template("projectpage.html", rows=rows, user=user)
+    rows = db.execute("SELECT name, yardage, fiber, weight, user_id FROM yarn WHERE user_id = :user_id AND name = :yarn", user_id=user_id, yarn=yarn)
+    return render_template("yarnpage.html", rows=rows, user=user)
+
 
 
 @app.route("/patterns", methods=["GET", "POST"])

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Projects.
+{% endblock %}
+{% block main %}
+<h1>{{ user }}'s {{rows[0]["name"]}}</h1>
+{% for row in rows %}
+    <ul>
+    <li class>Owner: {{ user }} </li>
+    <li class>Yardage: {{ row["yardage"] }}</li>
+    <li class>Fiber: {{ row["fiber"] }}</li>
+    <li class>Weight: {{ row["weight"] }}</li>
+  </ul>
+
+{% endfor %}
+{% endblock %}
+
+ yardage, fiber, weight,

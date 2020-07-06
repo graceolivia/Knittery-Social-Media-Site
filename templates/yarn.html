@@ -5,6 +5,7 @@ Yarn.
 {% endblock %}
 {% block main %}
 <h1>Yarn</h1>
+
 <h2>Stash new yarn.</h2>
   <a class="btn btn-dark" data-toggle="collapse" href="#newProject" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Stash yarn.</a>
  <div class="collapse multi-collapse" id="newProject">
@@ -30,26 +31,15 @@ Yarn.
     </div>
     <br>
     <hr></hr>
-<h2>Your Stash.</h2>
-<p>Here's what you've got in the stash:</p>
-<!--{% for row in rows %}-->
-<!--<div class="card mb-3" style="width: 18rem;">-->
-<!--  <div class="card-header">-->
-<!--    {{ row["name"] }}-->
-<!--  </div>-->
-<!--  <ul class="list-group list-group-flush">-->
-<!--    <li class="list-group-item">Fiber: {{ row["fiber"] }}</li>-->
-<!--    <li class="list-group-item">Yardage: {{ row["yardage"] }}</li>-->
-<!--    <li class="list-group-item">Weight: {{ row["weight"] }}</li>-->
-<!--  </ul>-->
-<!--</div>-->
-<!--{% endfor %}-->
+
+<h2>{{ user }}'s Stash.</h2>
+<p>Here's what {{ user }}'s got in the stash:</p>
 
 
 
 {% for row in rows %}
 <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
-  <div class="card-header">{{ row["name"] }}</div>
+  <div class="card-header"><a href="/yarn/{{ user }}/{{ row["name"] }}">{{ row["name"] }}</a></div>
   <div class="card-body">
     <ul>
     <li>Fiber: {{ row["fiber"] }}</li>
