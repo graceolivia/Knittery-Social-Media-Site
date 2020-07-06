@@ -32,6 +32,14 @@ Search
 
       </form>
 {% if results %}
+{% if tosearch == "users" %}
+{% for result in results %}
+<ul>
+  <li><a href="/profile/{{ result["name"] }}"> {{ result["name"] }}</a></li>
+</ul>
+{% endfor %}
+{% endif %}
+{% if tosearch == "yarn" or tosearch == "projects" %}
 {% for result in results %}
 
   <ul>
@@ -39,6 +47,7 @@ Search
   </ul>
 </div>
 {% endfor %}
-{% endif %}
 
+{% endif %}
+{% endif %}
 {% endblock %}

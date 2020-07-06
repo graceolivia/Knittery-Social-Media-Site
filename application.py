@@ -314,7 +314,6 @@ def search():
         print(searchwild)
         results = db.execute("SELECT * FROM :tosearch WHERE name LIKE :search",
         tosearch=tosearch, search=searchwild)
-        print(results)
         if len(results) == 0:
             flash("No results found with that query!")
             return redirect("/search")
@@ -329,7 +328,7 @@ def search():
             puser = db.execute("SELECT name FROM :tosearch WHERE id=:user_id", user_id=int(results[0]["user_id"]), tosearch=tosearch)
             return render_template("search.html", results=results, puser=puser, tosearch=tosearch)
         if (tosearch == "users"):
-            return redirect(url_for('profileget', user=results[0]["name"]))
+            return render_template("search.html", results=results, tosearch=tosearch)
         return redirect("/search")
     if request.method == "GET":
         return render_template("search.html")
