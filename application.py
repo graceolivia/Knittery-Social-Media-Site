@@ -194,8 +194,8 @@ def profileget(user):
     profile_id=getId(user)
     print(profile_id)
     #get friends
-    friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :currentuser_id",
-    currentuser_id=currentuser_id)
+    friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :profile_id",
+    profile_id=profile_id)
     print(friends_id)
     friends=[]
     fn = 0
@@ -219,8 +219,9 @@ def profileget(user):
         loggedinUser = db.execute("SELECT * FROM users WHERE name = :name",
         name=session["user"])
         loggedinUser_id = loggedinUser[0]["id"]
-        friendquery = db.execute("SELECT * FROM friends WHERE friender = :loggedinUser_id AND friendee = :currentuser_id",
-        loggedinUser_id = loggedinUser_id, currentuser_id=currentuser_id)
+        friendquery = db.execute("SELECT * FROM friends WHERE friender = :loggedinUser_id AND friendee = :profile_id",
+        loggedinUser_id = loggedinUser_id, profile_id=profile_id)
+        print(friendquery)
         if len(friendquery) == 0:
             print("not friends")
         else:
