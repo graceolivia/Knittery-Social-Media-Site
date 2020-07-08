@@ -88,8 +88,7 @@ def projectspages(user, project):
 
 @app.route("/projects/<user>/<project>/edit", methods=["GET", "POST"])
 def individualprojectedit(user, project):
-    p=project
-    pid = getProjectId(p)
+    pid = getProjectId(project)
     if request.method == "GET":
         user_id = getId(user)
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
@@ -99,8 +98,8 @@ def individualprojectedit(user, project):
         yarn = request.form.get("yarn")
         yardage = request.form.get("yardage")
         notes = request.form.get("notes")
-        db.execute("UPDATE projects SET name=:name WHERE id=:pid;", name=name, pid=pid)
-        return redirect(url_for('projectspages', user=user, project=project))
+        db.execute("UPDATE projects SET name=:name, yarn=:yarn, yardage=:yardage, notes=:notes WHERE id=:pid;", name=name, pid=pid, yarn=yarn, yardage=yardage, notes=notes)
+        return redirect(url_for('projectspages', user=user, project=name))
 
 @app.route("/yarn/<user>", methods=["GET", "POST"])
 def yarn(user):
