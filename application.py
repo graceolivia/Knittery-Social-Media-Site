@@ -36,6 +36,11 @@ def getUsername(id):
         name = profile[0]["name"]
         return name
 
+def getProjectId(name):
+    project = db.execute("SELECT id FROM projects WHERE name = :name", name=name)
+    project_id = project[0]["id"]
+    return project_id
+
 
 def is_allowed(filename):
     return '.' in filename and \
@@ -72,12 +77,30 @@ def projects(user):
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id=c_userid)
         return redirect(url_for('projects', user=session["user"]))
 
-@app.route("/projects/<user>/<project>", methods=["GET"])
+@app.route("/projects/<user>/<project>", methods=["GET", "POST"])
 def projectspages(user, project):
-    user_id = getId(user)
-    rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
-    return render_template("projectpage.html", rows=rows, user=user)
+    if request.method == "GET":
+        user_id = getId(user)
+        rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
+        return render_template("projectpage.html", rows=rows, user=user)
+    if request.method == "POST":
+        return redirect(url_for('individualprojectedit', user=user, project=project))
 
+@app.route("/projects/<user>/<project>/edit", methods=["GET", "POST"])
+def individualprojectedit(user, project):
+    p=project
+    pid = getProjectId(p)
+    if request.method == "GET":
+        user_id = getId(user)
+        rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
+        return render_template("projectpageedit.html", rows=rows, user=user)
+    if request.method == "POST":
+        name = request.form.get("name")
+        yarn = request.form.get("yarn")
+        yardage = request.form.get("yardage")
+        notes = request.form.get("notes")
+        db.execute("UPDATE projects SET name=:name WHERE id=:pid;", name=name, pid=pid)
+        return redirect(url_for('projectspages', user=user, project=project))
 
 @app.route("/yarn/<user>", methods=["GET", "POST"])
 def yarn(user):
