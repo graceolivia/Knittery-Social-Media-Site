@@ -27,7 +27,7 @@ Projects.
 <p>Here's what {{ user }} has been working on:</p>
 
 
-
+<div class="card-columns">
 {% for row in rows %}
 <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
   <div class="card-header"><a href="/projects/{{ user }}/{{ row["name"] }}">{{ row["name"] }}</a></div>
@@ -39,5 +39,8 @@ Projects.
   </ul>
   </div>
   </div>
+
+
 {% endfor %}
+<div>
 {% endblock %}

@@ -5,21 +5,20 @@
 {% endblock %}
 {% block main %}
 
-<div class="container">
-  <div class="row">
-      <div class="col-2">
-          <img src="{{ profile[0]["pic"] }}" class="profilepic" width="150">
-          </div>
-    <div class="col-6">
+<div class="row">
 
+<div class="col-sm-auto">
+<img src="{{ profile[0]["pic"] }}" class="profilepic" width="150">
 
-        <h1>{{ profile[0]["name"] }}</h1>
-
-  <ul>
+</div>
+<div class="col">
+  <h1>{{ profile[0]["name"] }}</h1>
+<ul>
 <li><b>Years knitting:</b> {{ profile[0]["years_knitting"] }}</li>
 <li><b>Favorite Color:</b> {{ profile[0]["favorite_color"] }}</li>
 <li><b>About Me:</b> {{ profile[0]["about_me"]}}</li>
 </ul>
+
 
 {% if profile[0]["name"] == session['user'] %}
 <form action="/profile" method="POST">
@@ -41,7 +40,7 @@
 </div>
 
 
-<div class="col-4">
+<div class="col-sm-auto">
 <div> <table class="proftable">
   <tr>
     <td>Projects: <a href="/projects/{{ profile[0]["name"] }}"> {{ nprojects }}</a></td>
@@ -61,13 +60,9 @@
 </ul>
 </div>
 </div>
-    </div>
-  </div>
 </div>
 
-
-
-
+</div>
 
 
 {% endblock %}

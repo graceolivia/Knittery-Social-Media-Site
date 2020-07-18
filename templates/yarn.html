@@ -36,7 +36,7 @@ Yarn.
 <p>Here's what {{ user }}'s got in the stash:</p>
 
 
-
+<div class="card-columns">
 {% for row in rows %}
 <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
   <div class="card-header"><a href="/yarn/{{ user }}/{{ row["name"] }}">{{ row["name"] }}</a></div>
@@ -49,5 +49,5 @@ Yarn.
   </div>
   </div>
 {% endfor %}
-
+</div>
 {% endblock %}
