@@ -48,6 +48,14 @@ def is_allowed(filename):
 
 # routes
 
+@app.errorhandler(404)
+def not_found(error):
+    return render_template("404.html")
+
+@app.errorhandler(500)
+def not_found(error):
+    return render_template("500.html")
+
 @app.route("/welcome")
 def welcome():
     return render_template("coverpage.html")
