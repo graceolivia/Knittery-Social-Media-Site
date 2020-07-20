@@ -149,3 +149,26 @@ background: linear-gradient(90deg, rgba(206,183,237,1) 2%, rgba(238,174,202,1) 4
 .container {
   padding-top: 20px;
 }
+
+.card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+}
+
+.card .likes {
+  float:left;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.card .more {
+  float:right;
+  font-weight: bold;
+  font-size: 30;
+  padding-top: 3px;
+}

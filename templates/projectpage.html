@@ -4,7 +4,13 @@
 Projects.
 {% endblock %}
 {% block main %}
-<h1>{{ user }}'s {{rows[0]["name"]}}</h1>
+<div class="row">
+<div class="col">
+
+<img class="profilepic" width="150px" src="{{ rows[0]["image"] }}">
+</div>
+<div class="col">
+  <h3>{{ user }}'s {{rows[0]["name"]}}</h3>
 {% for row in rows %}
     <ul>
     <li class>Maker: {{ user }} </li>
@@ -14,9 +20,25 @@ Projects.
   </ul>
 
 {% endfor %}
+</div>
+<div class="col">
+  <div class="row">
+    <div class="col">
 
+<form action="/projects/{{ user }}/{{ rows[0]["name"] }}/like" method="POST">
+  <button type="submit" class="btn btn-link">❤️</button>
+  </form>
+
+  </div>
+{% if session["user"] == users %}
+<div class="col">
 <form  action="/projects/{{ user }}/{{ rows[0]["name"] }}" method="POST" >
 <button type="submit" class="btn btn-dark">Edit</button>
 </form>
-
+{% else %}
+{% endif %}
+</div>
+</div>
+</div>
+</div>
 {% endblock %}

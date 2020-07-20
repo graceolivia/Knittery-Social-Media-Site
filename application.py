@@ -16,11 +16,15 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config["SECRET_KEY"] = key()
 
-
 db = SQL("sqlite:///yarn.db")
 
-# non-route functions
+# session object contains "user" (the username) and "user_id" (the id)
 
+# global variables
+
+
+
+# non-route functions
 
 def getId(user):
     currentuser = user
@@ -36,8 +40,9 @@ def getUsername(id):
         name = profile[0]["name"]
         return name
 
-def getProjectId(name):
-    project = db.execute("SELECT id FROM projects WHERE name = :name", name=name)
+def getProjectId(project, user):
+    user_id=getId(user)
+    project = db.execute("SELECT id FROM projects WHERE name = :name AND user_id=:user_id", name=project, user_id=user_id)
     project_id = project[0]["id"]
     return project_id
 
@@ -71,12 +76,11 @@ def index():
 @app.route("/projects/<user>", methods=["GET", "POST"])
 def projects(user):
     user_id = getId(user)
-    c_userid = getId(session["user"])
+    c_userid = session["user_id"]
     if request.method == "GET":
-        rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :id", id = user_id)
+        rows = db.execute("SELECT * FROM projects WHERE user_id = :id", id = user_id)
         return render_template("projects.html", rows=rows, user=user)
     if request.method == "POST":
-        print("post")
         name = request.form.get("name")
         yarn = request.form.get("yarn")
         yardage = request.form.get("yardage")
@@ -89,14 +93,22 @@ def projects(user):
 def projectspages(user, project):
     if request.method == "GET":
         user_id = getId(user)
-        rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
+        rows = db.execute("SELECT * FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
         return render_template("projectpage.html", rows=rows, user=user)
     if request.method == "POST":
         return redirect(url_for('individualprojectedit', user=user, project=project))
 
+@app.route("/projects/<user>/<project>/like", methods=["POST"])
+def likeproject(user, project):
+    if request.method == "POST":
+        project_id=getProjectId(project, user)
+        liker_id=getId(user)
+        db.execute("INSERT INTO project_likes(project_id, liker_id) VALUES (:project_id, :liker_id)", project_id=project_id, liker_id=liker_id)
+        return redirect(url_for('projectspages', user=user, project=project))
+
 @app.route("/projects/<user>/<project>/edit", methods=["GET", "POST"])
 def individualprojectedit(user, project):
-    pid = getProjectId(project)
+    pid = getProjectId(user, project)
     if request.method == "GET":
         user_id = getId(user)
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
@@ -129,8 +141,6 @@ def yarnpages(user, yarn):
     user_id = getId(user)
     rows = db.execute("SELECT name, yardage, fiber, weight, user_id FROM yarn WHERE user_id = :user_id AND name = :yarn", user_id=user_id, yarn=yarn)
     return render_template("yarnpage.html", rows=rows, user=user)
-
-
 
 @app.route("/patterns", methods=["GET", "POST"])
 def patterns():
@@ -174,6 +184,7 @@ def login():
             return redirect("/login")
         else:
             session["user"] = rows[0]["name"]
+            session["user_id"] = rows[0]["id"]
             print(session)
             flash("Logged in!")
             return redirect("/")
@@ -227,13 +238,11 @@ def register():
 def profileget(user):
     profile = db.execute("SELECT * FROM users WHERE name = :name",
     name=user)
-    currentuser_id=getId(session["user"])
+    currentuser_id=session["user_id"]
     profile_id=getId(user)
-    print(profile_id)
     #get friends
     friends_id = db.execute("SELECT friendee FROM friends WHERE friender = :profile_id",
     profile_id=profile_id)
-    print(friends_id)
     friends=[]
     fn = 0
     for entry in friends_id:
@@ -296,7 +305,6 @@ def profileedit():
 @app.route("/profile/upload", methods=["GET", "POST"])
 def profileupload():
     if request.method == "POST":
-        print("HELLOOO")
         if 'file' not in request.files:
             flash('No file part')
             print('No file part')
@@ -327,10 +335,10 @@ def profileupload():
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     if request.method == "GET":
-        session.pop("user", None)
-        return redirect("/")
+        return render_template("logout.html")
     if request.method == "POST":
         session.pop("user", None)
+        session.pop("user_id", None)
         return redirect("/")
 
 @app.route("/search", methods=["GET", "POST"])
