@@ -46,6 +46,11 @@ def getProjectId(project, user):
     project_id = project[0]["id"]
     return project_id
 
+def getLikes(project_id):
+    likelookup = db.execute("SELECT * FROM project_likes WHERE project_id=:project_id", project_id=project_id)
+    likes=len(likelookup)
+    return likes
+
 
 def is_allowed(filename):
     return '.' in filename and \
@@ -79,6 +84,11 @@ def projects(user):
     c_userid = session["user_id"]
     if request.method == "GET":
         rows = db.execute("SELECT * FROM projects WHERE user_id = :id", id = user_id)
+        for row in rows:
+            likes = getLikes(row["id"])
+            likesdict = {"likes" : likes}
+            row["likes"] = likes
+            print(row)
         return render_template("projects.html", rows=rows, user=user)
     if request.method == "POST":
         name = request.form.get("name")
@@ -94,7 +104,9 @@ def projectspages(user, project):
     if request.method == "GET":
         user_id = getId(user)
         rows = db.execute("SELECT * FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
-        return render_template("projectpage.html", rows=rows, user=user)
+        project_id=rows[0]["id"]
+        likes = getLikes(project_id)
+        return render_template("projectpage.html", rows=rows, user=user, likes=likes)
     if request.method == "POST":
         return redirect(url_for('individualprojectedit', user=user, project=project))
 
@@ -355,9 +367,6 @@ def search():
         if len(results) == 0:
             flash("No results found with that query!")
             return redirect("/search")
-        print(results)
-        # if (tosearch == "patterns"):
-        #     return render_template("patterns.html", rows=results)
         if (tosearch == "projects" or tosearch == "yarn"):
             for result in results:
                 print(getUsername(result["user_id"]))
