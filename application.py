@@ -125,6 +125,14 @@ def likeproject(user, project):
         db.execute("INSERT INTO project_likes(project_id, liker_id) VALUES (:project_id, :liker_id)", project_id=project_id, liker_id=liker_id)
         return redirect(url_for('projectspages', user=user, project=project))
 
+@app.route("/projects/<user>/<project>/unlike", methods=["POST"])
+def unlikeproject(user, project):
+    if request.method == "POST":
+        project_id=getProjectId(project, user)
+        liker_id=session["user_id"]
+        db.execute("DELETE FROM project_likes WHERE project_id=:project_id AND liker_id=:liker_id", project_id=project_id, liker_id=liker_id)
+        return redirect(url_for('projectspages', user=user, project=project))
+
 @app.route("/projects/<user>/<project>/edit", methods=["GET", "POST"])
 def individualprojectedit(user, project):
     pid = getProjectId(user, project)

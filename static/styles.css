@@ -172,3 +172,8 @@ background: linear-gradient(90deg, rgba(206,183,237,1) 2%, rgba(238,174,202,1) 4
   font-size: 30;
   padding-top: 3px;
 }
+
+.btn-like {
+  margin:0;
+  padding:0;
+}
