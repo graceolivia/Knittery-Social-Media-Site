@@ -49,7 +49,9 @@ def getProjectId(project, user):
 def getLikes(project_id):
     likelookup = db.execute("SELECT * FROM project_likes WHERE project_id=:project_id", project_id=project_id)
     likes=len(likelookup)
-    return likes
+    if likes == 1:
+        return (str(likes) + " Like")
+    return (str(likes) + " Likes")
 
 def isLiked(project_id):
     isLiked = db.execute("SELECT * FROM project_likes WHERE project_id=:project_id AND liker_id=:liker_id", project_id=project_id, liker_id=session["user_id"])
