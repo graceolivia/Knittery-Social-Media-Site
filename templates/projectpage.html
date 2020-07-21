@@ -26,7 +26,7 @@ Projects.
     <div class="col">
 
 <form action="/projects/{{ user }}/{{ rows[0]["name"] }}/like" method="POST">
-  <button type="submit" class="btn btn-link">❤️ {{ likes }}</button>
+  <button type="submit" class="btn btn-link">{% if isItLiked == True %} ❤️ {% else %}  ♡  {% endif %} {{ likes }}</button>
   </form>
 
   </div>

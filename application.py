@@ -51,6 +51,11 @@ def getLikes(project_id):
     likes=len(likelookup)
     return likes
 
+def isLiked(project_id):
+    isLiked = db.execute("SELECT * FROM project_likes WHERE project_id=:project_id AND liker_id=:liker_id", project_id=project_id, liker_id=session["user_id"])
+    if (len(isLiked) > 0):
+        return True
+    return False
 
 def is_allowed(filename):
     return '.' in filename and \
@@ -106,7 +111,9 @@ def projectspages(user, project):
         rows = db.execute("SELECT * FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
         project_id=rows[0]["id"]
         likes = getLikes(project_id)
-        return render_template("projectpage.html", rows=rows, user=user, likes=likes)
+        isItLiked=isLiked(project_id)
+        print(isItLiked)
+        return render_template("projectpage.html", rows=rows, user=user, likes=likes, isItLiked=isItLiked)
     if request.method == "POST":
         return redirect(url_for('individualprojectedit', user=user, project=project))
 
@@ -114,7 +121,7 @@ def projectspages(user, project):
 def likeproject(user, project):
     if request.method == "POST":
         project_id=getProjectId(project, user)
-        liker_id=getId(user)
+        liker_id=session["user_id"]
         db.execute("INSERT INTO project_likes(project_id, liker_id) VALUES (:project_id, :liker_id)", project_id=project_id, liker_id=liker_id)
         return redirect(url_for('projectspages', user=user, project=project))
 
