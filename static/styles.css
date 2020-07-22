@@ -60,7 +60,7 @@ font-family: 'Bungee Shade', cursive;
 }
 
 body {
-     background-color: black;
+     background-color: #121212;
      color: white;
      font-family: 'Montserrat', sans-serif;
 }
@@ -163,17 +163,35 @@ background: linear-gradient(90deg, rgba(206,183,237,1) 2%, rgba(238,174,202,1) 4
 .card .likes {
   float:left;
   margin-bottom: 5px;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
-.card .more {
+.more {
   float:right;
-  font-weight: bold;
-  font-size: 30;
-  padding-top: 3px;
+  padding-top: 0px;
 }
 
-.btn-like {
+.more button {
+  color: white;
+  font-weight: bold;
+  font-size: 40;
+}
+
+.card .btn-like {
   margin:0;
   padding:0;
+}
+
+.dropdown-menu{
+  background-color:#121212;
+  width: 50%;
+}
+
+.dropdown-item{
+  font-size: 14px;
+}
+
+.dropdown-item:hover{
+  background-color:#191919;
+  color:white;
 }

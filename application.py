@@ -30,6 +30,7 @@ def getId(user):
     currentuser = user
     profile = db.execute("SELECT * FROM users WHERE name = :name",
     name=currentuser)
+    print(profile)
     currentuser_id=profile[0]["id"]
     return currentuser_id
 
@@ -52,6 +53,11 @@ def getLikes(project_id):
     if likes == 1:
         return (str(likes) + " Like")
     return (str(likes) + " Likes")
+
+def getLikesNum(project_id):
+    likelookup = db.execute("SELECT * FROM project_likes WHERE project_id=:project_id", project_id=project_id)
+    likes=len(likelookup)
+    return (likes)
 
 def isLiked(project_id):
     isLiked = db.execute("SELECT * FROM project_likes WHERE project_id=:project_id AND liker_id=:liker_id", project_id=project_id, liker_id=session["user_id"])
@@ -92,7 +98,7 @@ def projects(user):
     if request.method == "GET":
         rows = db.execute("SELECT * FROM projects WHERE user_id = :id", id = user_id)
         for row in rows:
-            likes = getLikes(row["id"])
+            likes = getLikesNum(row["id"])
             likesdict = {"likes" : likes}
             row["likes"] = likes
             print(row)
@@ -137,8 +143,10 @@ def unlikeproject(user, project):
 
 @app.route("/projects/<user>/<project>/edit", methods=["GET", "POST"])
 def individualprojectedit(user, project):
-    pid = getProjectId(user, project)
+    pid = getProjectId(project, user)
     if request.method == "GET":
+        if (user != session["user"]):
+            return redirect(url_for('projectspages', user=user, project=project))
         user_id = getId(user)
         rows = db.execute("SELECT name, yarn, yardage, notes, user_id FROM projects WHERE user_id = :user_id AND name = :project", user_id=user_id, project=project)
         return render_template("projectpageedit.html", rows=rows, user=user)
@@ -149,6 +157,19 @@ def individualprojectedit(user, project):
         notes = request.form.get("notes")
         db.execute("UPDATE projects SET name=:name, yarn=:yarn, yardage=:yardage, notes=:notes WHERE id=:pid;", name=name, pid=pid, yarn=yarn, yardage=yardage, notes=notes)
         return redirect(url_for('projectspages', user=user, project=name))
+
+@app.route("/projects/<user>/<project>/delete", methods=["GET", "POST"])
+def deleteproject(user, project):
+    pid = getProjectId(project, user)
+    if (user != session["user"]):
+        return redirect(url_for('projectspages', user=user, project=project))
+    if request.method == "GET":
+        flash("are you sure")
+        return redirect(url_for('projects', user=user))
+    if request.method == "POST":
+        flash(project + " deleted")
+        db.execute("DELETE FROM projects WHERE id=:pid", pid=pid)
+        return redirect(url_for('projects', user=user))
 
 @app.route("/yarn/<user>", methods=["GET", "POST"])
 def yarn(user):
