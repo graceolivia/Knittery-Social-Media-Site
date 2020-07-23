@@ -128,8 +128,8 @@ def projectspages(user, project):
 @app.route("/projects/<user>/<project>/like", methods=["POST"])
 def likeproject(user, project):
     if request.method == "POST":
-        project_id=getProjectId(project, user)
-        liker_id=session["user_id"]
+        project_id=request.form.get("project_id")
+        liker_id=request.form.get("liker_id")
         db.execute("INSERT INTO project_likes(project_id, liker_id) VALUES (:project_id, :liker_id)", project_id=project_id, liker_id=liker_id)
         return redirect(url_for('projectspages', user=user, project=project))
 

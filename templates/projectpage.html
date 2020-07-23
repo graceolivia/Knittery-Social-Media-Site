@@ -24,9 +24,18 @@ Projects.
 <div class="col">
 
 
-{% if isItLiked == True %}<form action="/projects/{{ user }}/{{ rows[0]["name"] }}/unlike" method="POST">
-  <button type="submit" class="btn btn-link btn-like"> ❤️ </button> {% else %} <form action="/projects/{{ user }}/{{ rows[0]["name"] }}/like" method="POST">
-  <button type="submit" class="btn btn-link btn-like"> ♡  {% endif %}</button> {{ likes }}
+{% if isItLiked == True %}
+<form id="likebutton" action="/projects/{{ user }}/{{ rows[0]["name"] }}/unlike" method="POST">
+  <input type = "hidden" name = "project_id" value = "{{ rows[0]["id"] }}" />
+  <input type = "hidden" name = "liker_id" value = "{{ session["user_id"] }}" />
+  <button type="submit" class="btn btn-link btn-like"> ❤️ </button>
+  {% else %}
+  <form action="/projects/{{ user }}/{{ rows[0]["name"] }}/like" method="POST">
+    <input type = "hidden" name = "project_id" value = "{{ rows[0]["id"] }}" />
+    <input type = "hidden" name = "liker_id" value = "{{ session["user_id"] }}" />
+  <button id="unlikebutton" type="submit" class="btn btn-link btn-like"> ♡ </button>
+    {% endif %}
+    {{ likes }}
   </form>
 
 
@@ -35,7 +44,6 @@ Projects.
 <form  action="/projects/{{ user }}/{{ rows[0]["name"] }}" method="POST" >
 <button type="submit" class="btn btn-dark">Edit</button>
 <button class="btn btn-danger delete-proj-mini" type="button" data-toggle="modal" data-target="#confirmDelete" data-url="/projects/{{ user }}/{{ rows[0]["name"] }}/delete">Delete</button>
-
 </form>
 
 
@@ -73,14 +81,28 @@ Projects.
 
 <footer>
   <script>
+
+//pass data to delete modal
   $(document).on("click", ".delete-proj-mini", function(e) {
     e.preventDefault();
     var myUrl = $(this).data('url');
     $("#deleteTheProject").attr('action', myUrl );
-    // As pointed out in comments,
-    // it is unnecessary to have to manually call the modal.
-    // $('#addBookDialog').modal('show');
+
 });
+
+//ajax the likes/unlikes
+
+// $("#likebutton").submit(function( e )){
+//
+// e.preventDefault();
+// user={{ session["user_id"] }}
+//
+//
+//
+// }
+
+
+
     </script>
     </footer>
 
