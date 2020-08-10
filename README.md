@@ -1,5 +1,20 @@
 # cs50_final_project
-For my CS50 Web Track Final Project, I'm attempting to create a very simplified Ravelry clone. I'll use Flask and SQL, as we learned in our Finance app.
+For my CS50 Web Track Final Project, I'm attempting to create a very simplified Ravelry-inspired clone. I'll use Flask and SQL, as we learned in our Finance app.
+
+<h3>Functionality</h3>
+
+You can register or login to a soothing dark-mode interface with some particles.js for spice.
+
+![Login Screen](https://github.com/graceolivia/cs50_final_project/blob/master/preview%20gifs/loginknittery.gif?raw=true)
+
+You  can browse other profiles, see what other users have been knitting, and add friends.
+
+![Add friend](https://github.com/graceolivia/cs50_final_project/blob/master/preview%20gifs/addfriend.gif?raw=true)
+
+Update your Profile with personal info or new projects.
+
+![Profile](https://github.com/graceolivia/cs50_final_project/blob/master/preview%20gifs/updateprofile.gif?raw=true)
+
 
 <h3>Plan</h3>
 
